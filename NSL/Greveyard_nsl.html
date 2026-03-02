@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>     <div class="pb"></div>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -724,13 +724,6 @@ body {
         </button>
       </div>
 
-      <div class="alert-pill" style="margin-top:20px;">
-        <span style="font-size:22px;">⚠️</span>
-        <div class="alert-pill-text">
-          <div class="alert-pill-title">1 Risk Location Pending</div>
-          <div class="alert-pill-sub">Graveyard audit required · NSL tags available</div>
-        </div>
-      </div>
       <div class="pb"></div>
     </div>
 
@@ -799,7 +792,7 @@ body {
         <div class="f-section"><span class="f-sec-label">Vehicle Identity</span><div class="f-sec-line"></div></div>
 
         <div class="f-group">
-          <div class="f-label">Chassis Number <span>*</span></div>
+          <div class="f-label">Chassis Number <span></span></div>
           <input class="f-input" type="text" placeholder="Enter chassis / VIN number" id="chassisInput">
         </div>
 
@@ -917,7 +910,7 @@ body {
             </div>
           </div>
 
-          <div class="f-group" style="margin-top:10px;">
+          <div class="f-group" id="empYardGroup" style="margin-top:10px;">
             <div class="f-label">Employee of Yard Owner?</div>
             <div class="toggle-pair">
               <div class="tog" onclick="toggleTog(this, 'empYard')">Yes</div>
@@ -1327,26 +1320,114 @@ function toggleVideo(el) {
 }
 
 // ── Customer Autocomplete ──
+// Master customer list used for dropdown + type-ahead
 const customers = [
-  'Visually Right Private Limited',
-  'Vistar Mobility Pvt Ltd',
-  'Vista Green Ventures',
-  'Ola Electric Fleet Services',
-  'Mahindra Last Mile Mobility',
-  'Yulu Bikes Private Limited',
-  'Bounce Infinity',
-  'Hero Electric Vehicles'
+  '3CAS LOGISTICS SOLUTION PRIVATE LIMITED',
+  'AE MART PRIVATE LIMITED',
+  'ANV Web Ventures Private Limited',
+  'ASR INDUSTRIES',
+  'Battreuzhe Mobility Solutions Private Limited',
+  'Bijlride Private Limited',
+  'Bluwheelz Mobility Services Private Limited',
+  'Bysyshare Technologies Private Limited',
+  'Cabh Elektra Private Limited',
+  'DC5 Test',
+  'DCO',
+  'DELIVERY PIGEON LLP',
+  'Diptab Ventures Private Limited',
+  'EC Wheels India Private Limited',
+  'Electra HR solutions Private Limited',
+  'Eleric Automotive Private Limited',
+  'EV91Etechnologies Private Limited',
+  'Evage Mobility Private Limited',
+  'Evify Logistic Private Limited',
+  'EvoRentalPrivateLimited',
+  'EvoRentalPrivateLimited-1',
+  'EvoRentalPrivateLimited-3',
+  'Evogo Logistics Private Limited',
+  'Exponent Energy Private Limited',
+  'Fagrayyeezer Dot Com Private Limited',
+  'Gofuel Private Limited',
+  'GOLFER INDIA',
+  'GOLDEN AERO LOGISTICS AND CONCIERGE SERVICES',
+  'Green Drive Auto Service Private Limited',
+  'Green Drive Auto Services Private Limited (Hyderabad-2)',
+  'Green Evolve Private Limited',
+  'Growbillion Wings Advisory and Logistics Private Limited',
+  'Hybrid Fleet Management Private Limited',
+  'I-LINE.4L SOLUTIONS PRIVATE LIMITED',
+  'INNEED IT RESOURCE',
+  'INNEED GREENMobility SolutionPrivate Limited',
+  'Kissan Mobility Private Limited',
+  'Kontinuum Green Mobility Private Limited',
+  'Lightzip Technologies Private Limited',
+  'LINKMILES MOBILITY PRIVATE LIMITED',
+  'Lithium Urban Technologies Private Limited',
+  'LOADSHARE NETWORKS PRIVATE LIMITED',
+  'Magenta Ev Solutions Private Limited',
+  'Minder Ev Logistics Private Limited',
+  'Moving Urban Technologies Private Limited',
+  'Motaroy Mobility Private limited',
+  'Mototaxi Services Private Limited',
+  'Myzekk Technologies Private Limited',
+  'P. Beam Labs Private Limited',
+  'REEFX GREEN MOBILITY LIMITED',
+  'Reinvent Agrochain Private Limited',
+  'RRM LOGISTICS PRIVATE LIMITED',
+  'RURAL SAMRIDDHI ETECHNOLOGIES PRIVATE LIMITED',
+  'Sandeep Transport',
+  'SM Enterprises',
+  'SPIDR LOGISTICS PRIVATE LIMITED',
+  'Sprintx Road Services Private Limited',
+  'SuAn Logistics',
+  'Swapeco Solutions Private Limited',
+  'Trade First',
+  'Traveltech Experiences Private Limited',
+  'Underlow Management Private Limited',
+  'V. V. Exporter Private Limited',
+  'Ventable Enterprise',
+  'VIVA LOGISTICS',
+  'VIVEK TRAVELS PRIVATE LIMITED',
+  'VANIK XPRESS PVT.LTD.',
+  'Wickriddhe Adventure Services Private Limited',
+  'Yellowings Delivery Services Private Limited',
+  'ZEROLPAPZ TECHNOLOGIES PRIVATE LIMITED'
 ];
 
+// show all when input focused and empty; filter as user types
 function onCustInput(val) {
   const dd = document.getElementById('custDropdown');
-  if (!val || val.length < 2) { dd.style.display = 'none'; return; }
-  const filtered = customers.filter(c => c.toLowerCase().includes(val.toLowerCase()));
-  if (!filtered.length) { dd.style.display = 'none'; return; }
+  const query = (val || '').trim().toLowerCase();
+
+  // If no query, show top N customers to act like a dropdown
+  let filtered;
+  if (!query) {
+    filtered = customers.slice(0, 20); // first 20 alphabetically / as listed
+  } else if (query.length < 2) {
+    dd.style.display = 'none';
+    return;
+  } else {
+    filtered = customers.filter(c => c.toLowerCase().includes(query));
+  }
+
+  if (!filtered.length) {
+    dd.style.display = 'none';
+    return;
+  }
+
   dd.innerHTML = filtered.map(c => {
-    const idx = c.toLowerCase().indexOf(val.toLowerCase());
-    const hi = c.substring(0, idx) + '<strong>' + c.substring(idx, idx + val.length) + '</strong>' + c.substring(idx + val.length);
-    return `<div class="ac-item" onclick="selectCust('${c}')">${hi}</div>`;
+    const lower = c.toLowerCase();
+    const idx = lower.indexOf(query);
+    // Highlight only when there is a query
+    if (idx >= 0 && query.length > 0) {
+      const hi = c.substring(0, idx) +
+        '<strong>' +
+        c.substring(idx, idx + query.length) +
+        '</strong>' +
+        c.substring(idx + query.length);
+      return `<div class="ac-item" onclick="selectCust('${c.replace(/'/g, "\\'")}')">${hi}</div>`;
+    }
+    return `<div class="ac-item" onclick="selectCust('${c.replace(/'/g, "\\'")}')">${c}</div>`;
   }).join('');
   dd.style.display = 'block';
 }
@@ -1381,11 +1462,35 @@ function selectTP(name) {
 const togGroups = {};
 function toggleTog(el, group) {
   const parent = el.parentElement;
-  parent.querySelectorAll('.tog').forEach(t => {
+  const toggles = Array.from(parent.querySelectorAll('.tog'));
+
+  toggles.forEach(t => {
     t.classList.remove('yes', 'no');
   });
-  const idx = Array.from(parent.children).indexOf(el);
-  el.classList.add(idx === 0 ? 'yes' : 'no');
+
+  const idx = toggles.indexOf(el);
+  const isYes = idx === 0;
+  el.classList.add(isYes ? 'yes' : 'no');
+
+  // POC Classification logic:
+  // If Employee of Customer = Yes → hide Yard Owner section.
+  // If Employee of Customer = No  → show Yard Owner section and auto-mark Yes.
+  if (group === 'empCust') {
+    const yardGroup = document.getElementById('empYardGroup');
+    if (yardGroup) {
+      const yardToggles = Array.from(yardGroup.querySelectorAll('.tog'));
+      if (isYes) {
+        yardGroup.style.display = 'none';
+        yardToggles.forEach(t => t.classList.remove('yes', 'no'));
+      } else {
+        yardGroup.style.display = '';
+        yardToggles.forEach(t => t.classList.remove('yes', 'no'));
+        if (yardToggles[0]) {
+          yardToggles[0].classList.add('yes');
+        }
+      }
+    }
+  }
 }
 
 // ── Location Type Logic ──
