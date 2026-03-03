@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEFAULT Reverted - Vehicle Alert</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0f2f5;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 660px;
+    animation: rise 0.5s ease both;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Email Chrome Bar */
+  .chrome {
+    background: #e2e5ea;
+    border-radius: 12px 12px 0 0;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .d1 { background: #ff5f57; }
+  .d2 { background: #febc2e; }
+  .d3 { background: #28c840; }
+  .chrome-title { margin-left: auto; font-size: 11px; color: #999; letter-spacing: 1.5px; font-family: 'Inter', sans-serif; }
+
+  /* Main email card */
+  .email-card {
+    background: #ffffff;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  /* Top Banner */
+  .top-banner {
+    background: #1a9e4e;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 28px;
+  }
+  .banner-left { display: flex; align-items: center; gap: 8px; }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #a8ecc4; animation: blink 1.4s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .banner-text { font-size: 11px; color: rgba(255,255,255,0.85); letter-spacing: 2px; font-family: 'Inter', sans-serif; font-weight: 500; }
+  .banner-ref { font-size: 10px; color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif; letter-spacing: 1px; }
+
+  /* Header */
+  .header {
+    padding: 36px 36px 28px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .org-name { font-size: 11px; color: #aaa; letter-spacing: 2px; font-weight: 500; margin-bottom: 10px; font-family: 'Inter', sans-serif; }
+  .email-subject {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+  }
+  .email-subject .red { color: #1a9e4e; }
+  .email-date { font-size: 12px; color: #aaa; margin-top: 8px; }
+
+  .status-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .badge-chip {
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+  }
+  .chip-old { background: #fff0f0; color: #cc1a1a; border: 1.5px solid #f5c6c6; text-decoration: line-through; }
+  .chip-new { background: #edfff4; color: #1a9e4e; border: 1.5px solid #a8ecc4; }
+  .badge-arrow { font-size: 18px; color: #ccc; }
+
+  /* Meta strip */
+  .meta-strip {
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 14px 36px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: #bbb; letter-spacing: 1.5px; margin-bottom: 3px; font-family: 'Inter', sans-serif; }
+  .meta-value { font-size: 13px; color: #333; font-weight: 600; }
+
+  /* Body */
+  .body { padding: 28px 36px; }
+
+  .greeting { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 24px; }
+  .greeting b { color: #222; }
+
+  /* Payment highlight */
+  .payment-card {
+    background: linear-gradient(135deg, #1a9e4e 0%, #27ae60 100%);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .payment-card .label { font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 1.5px; font-family: 'Inter', sans-serif; margin-bottom: 6px; }
+  .payment-card .amount { font-size: 32px; font-weight: 700; color: #fff; }
+  .payment-card .sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+  .payment-icon-wrap { width: 52px; height: 52px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+
+  /* Info Sections */
+  .section { margin-bottom: 20px; border: 1.5px solid #f0f0f0; border-radius: 12px; overflow: hidden; }
+
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .sec-head.green-bg { background: #f2fff7; }
+  .sec-head.grey-bg { background: #f9f9f9; }
+
+  .sec-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .icon-r { background: #edfff4; }
+  .icon-g { background: #edfff4; }
+  .icon-b { background: #edf5ff; }
+
+  .sec-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #888; font-family: 'Inter', sans-serif; }
+  .sec-title.green { color: #1a9e4e; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; }
+  .grid-item {
+    padding: 14px 20px;
+    border-right: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .grid-item:nth-child(even) { border-right: none; }
+  .grid-item.full { grid-column: 1/-1; border-right: none; }
+  .grid-item:last-child, .grid-item:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+
+  .g-label { font-size: 10px; color: #bbb; letter-spacing: 1.5px; margin-bottom: 5px; font-family: 'Inter', sans-serif; }
+  .g-value { font-size: 13px; color: #222; font-weight: 500; }
+  .g-value.red { color: #1a9e4e; font-weight: 700; }
+  .g-value.green { color: #1a9e4e; font-weight: 700; }
+  .g-value.amber { color: #d97706; font-weight: 600; }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    gap: 0;
+    margin-bottom: 24px;
+    background: #fafafa;
+    border: 1.5px solid #f0f0f0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .tl-item {
+    flex: 1;
+    padding: 14px 16px;
+    border-right: 1px solid #f0f0f0;
+    position: relative;
+  }
+  .tl-item:last-child { border-right: none; }
+  .tl-num { font-size: 9px; color: #1a9e4e; letter-spacing: 1.5px; font-weight: 700; font-family: 'Inter', sans-serif; margin-bottom: 5px; }
+  .tl-event { font-size: 12px; color: #333; font-weight: 600; line-height: 1.3; }
+  .tl-time { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+  /* Footer */
+  .footer {
+    padding: 20px 36px;
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+  }
+  .footer-note { font-size: 11px; color: #bbb; line-height: 1.7; margin-bottom: 12px; }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand { font-size: 12px; font-weight: 700; color: #1a9e4e; letter-spacing: 1px; font-family: 'Inter', sans-serif; }
+  .footer-ref { font-size: 10px; color: #ccc; letter-spacing: 0.5px; }
+
+  .green-line { height: 3px; background: linear-gradient(90deg, #1a9e4e, #4ade80, #1a9e4e); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Chrome -->
+  <div class="chrome">
+    <div class="dot d1"></div>
+    <div class="dot d2"></div>
+    <div class="dot d3"></div>
+    <div class="chrome-title">FleetOS — AUTOMATED MAILER</div>
+  </div>
+
+  <div class="email-card">
+
+    <!-- Top Banner -->
+    <div class="top-banner">
+      <div class="banner-left">
+        <div class="live-dot"></div>
+        <div class="banner-text">AUTOMATED SYSTEM NOTIFICATION</div>
+      </div>
+      <div class="banner-ref">REF: FleetOS/DL1LZ4521/2026</div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="org-name">FleetOS</div>
+        <div class="email-subject">DEFAULT <span class="green-accent">REVERTED</span><br>Vehicle DL1LZ4521</div>
+        <div class="email-date">27 February 2026 · Automated Alert</div>
+      </div>
+      <div class="status-badge">
+        <div class="badge-chip chip-old">REPOSSESSED</div>
+        <div class="badge-arrow">↓</div>
+        <div class="badge-chip chip-new">✓ DELIVERED</div>
+      </div>
+    </div>
+
+    <!-- Meta Strip -->
+    <div class="meta-strip">
+      <div class="meta-item">
+        <div class="meta-label">VEHICLE REG.</div>
+        <div class="meta-value">DL1LZ4521</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">CHASSIS NO.</div>
+        <div class="meta-value">MHGBSDF2E343497</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">MODEL</div>
+        <div class="meta-value">Tata Ace EV</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">DRIVER</div>
+        <div class="meta-value">Asif Mohammad</div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+
+      <div class="greeting">
+        Hi <b>Team</b>,<br>
+        The DEFAULT status for vehicle <b>DL1LZ4521 (Tata Ace EV)</b>, chassis <b>MHGBSDF2E343497</b>, mapped to <b>Asif Mohammad</b>, has been officially <b style="color:#1a9e4e">REVERTED</b> following managerial review and confirmation of updated payment/settlement.
+      </div>
+
+      <!-- Reversal Details -->
+      <div class="section">
+        <div class="sec-head grey-bg">
+          <div class="sec-icon icon-g">✅</div>
+          <div class="sec-title">REVERSAL DETAILS</div>
+        </div>
+        <div class="grid-2">
+          <div class="grid-item">
+            <div class="g-label">REVERSAL APPROVED BY</div>
+            <div class="g-value">Dilip Gupta</div>
+          </div>
+          <div class="grid-item">
+            <div class="g-label">ROLE</div>
+            <div class="g-value">Regional Manager</div>
+          </div>
+          <div class="grid-item full">
+            <div class="g-label">RECORDED REASON</div>
+            <div class="g-value green">Payment Received — ₹30,000</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Default Background -->
+      <div class="section">
+        <div class="sec-head green-bg">
+          <div class="sec-icon icon-r">⚠️</div>
+          <div class="sec-title red">DEFAULT BACKGROUND</div>
+        </div>
+        <div class="grid-2">
+          <div class="grid-item">
+            <div class="g-label">MARKED BY</div>
+            <div class="g-value">Rahul Sharma</div>
+          </div>
+          <div class="grid-item">
+            <div class="g-label">ROLE</div>
+            <div class="g-value">DCO Executive</div>
+          </div>
+          <div class="grid-item">
+            <div class="g-label">DEFAULT DATE & TIME</div>
+            <div class="g-value red">27 Feb 2026 · 10:42 AM</div>
+          </div>
+          <div class="grid-item">
+            <div class="g-label">DEFAULT REASON</div>
+            <div class="g-value amber">Payment Overdue</div>
+          </div>
+          <div class="grid-item">
+            <div class="g-label">APPROVED BY</div>
+            <div class="g-value">Dilip Gupta</div>
+          </div>
+          <div class="grid-item">
+            <div class="g-label">APPROVAL TIME</div>
+            <div class="g-value">27 Feb 2026 · 10:45 AM</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Red Line -->
+    <div class="green-line"></div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-note">
+        This is an automated notification generated by the FleetOS. Please do not reply directly to this email.
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-brand">FleetOS</div>
+        <div class="footer-ref">REF: FleetOS/DL1LZ4521/2026 · 27 Feb 2026</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
