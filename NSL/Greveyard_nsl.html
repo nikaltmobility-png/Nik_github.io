@@ -1,4 +1,4 @@
-<!DOCTYPE html>     <div class="pb"></div>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -706,6 +706,17 @@ body {
             <span class="tile-arr">›</span>
           </div>
         </button>
+        <button class="tile" onclick="goGraveyard()">
+          <div class="tile-accent"></div>
+          <div class="tile-inner">
+            <div class="tile-icon">🪦</div>
+            <div>
+              <div class="tile-name">NSL Graveyard</div>
+              <div class="tile-sub">Dead Vehicles · Direct Tag</div>
+            </div>
+            <span class="tile-arr">›</span>
+          </div>
+        </button>
         <button class="tile dim">
           <div class="tile-accent" style="background:var(--gray-300);"></div>
           <div class="tile-inner">
@@ -788,37 +799,17 @@ body {
     <div class="scroller">
       <div class="form-body">
 
-        <!-- Vehicle Identity -->
-        <div class="f-section"><span class="f-sec-label">Vehicle Identity</span><div class="f-sec-line"></div></div>
-
-        <div class="f-group">
-          <div class="f-label">Chassis Number <span></span></div>
-          <input class="f-input" type="text" placeholder="Enter chassis / VIN number" id="chassisInput">
+        <!-- NSL Tag (fixed: Graveyard / Dead Vehicle) -->
+        <div class="nsl-selected-banner" style="margin-top:4px; margin-bottom:16px;">
+          <span class="nsb-icon"></span>
+          <div>
+            <div class="nsb-title">NSL Tag · Graveyard / Dead Vehicle</div>
+            <div class="nsb-sub">This audit is tagged as NSL Graveyard by default.</div>
+          </div>
         </div>
 
-        <div class="f-group">
-          <div class="f-label">Registration Number <span style="color:var(--gray-400); font-size:11px;">(optional)</span></div>
-          <input class="f-input" type="text" placeholder="MH12AB1234 (optional)">
-        </div>
-
-        <!-- NSL Tags -->
-        <div class="f-section"><span class="f-sec-label">NSL Tag</span><div class="f-sec-line"></div></div>
-
-        <div class="f-group">
-          <div class="f-label">Select NSL Tag <span>*</span></div>
-          <select class="f-select" id="nslSelect" onchange="onNSLChange(this.value)">
-            <option value="">— Select NSL Tag —</option>
-            <option value="graveyard">Graveyard / Dead Vehicle</option>
-            <option value="running">RUNNING</option>
-            <option value="non_moving">NON-MOVING</option>
-            <option value="functional_non_utilised">FUNCTIONAL BUT NON-UTILISED</option>
-            <option value="out_of_custody">OUT OF CUSTOMER’S CUSTODY</option>
-            <option value="theft">THEFT</option>
-          </select>
-        </div>
-
-        <!-- GEO — shown when graveyard selected -->
-        <div id="graveyardBlock" style="display:none;">
+        <!-- GEO -->
+        <div id="graveyardBlock">
 
           <div class="nsl-selected-banner">
             <span class="nsb-icon"></span>
@@ -1150,6 +1141,18 @@ function goBack(id) {
 function onNSLChange(val) {
   const block = document.getElementById('graveyardBlock');
   block.style.display = val === 'graveyard' ? 'block' : 'none';
+}
+
+// Quick entry: NSL Graveyard tile on home → jump straight to Step 1 with tag preselected
+function goGraveyard() {
+  // navigate directly to Step 1 screen
+  go('s2');
+  // set NSL dropdown to Graveyard / Dead Vehicle and show its block
+  const sel = document.getElementById('nslSelect');
+  if (sel) {
+    sel.value = 'graveyard';
+    onNSLChange('graveyard');
+  }
 }
 
 // ── Photo Mini: open file picker & mark done ──
