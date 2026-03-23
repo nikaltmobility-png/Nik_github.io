@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Delivery Challan – Document Bulk Upload Mockup v2</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Segoe UI',sans-serif;
+  background:#f5f6fa;
+  overflow:hidden;
+  width:1280px; height:720px;
+  position:relative;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position:absolute; left:0; top:0; width:200px; height:100%;
+  background:#1a1f2e;
+  display:flex; flex-direction:column;
+  padding:16px 0;
+  z-index:1;
+}
+.sidebar-item {
+  padding:9px 20px; color:#8b92a9; font-size:12.5px;
+  cursor:pointer; display:flex; align-items:center; gap:8px;
+}
+.sidebar-item.active { color:#fff; background:rgba(255,255,255,.07); border-left:3px solid #3b7ddd; }
+.sidebar-logo { color:#fff; font-size:14px; font-weight:700; padding:12px 20px 18px; }
+
+/* ── Main ── */
+.main { position:absolute; left:200px; top:0; width:1080px; height:100%; display:flex; flex-direction:column; }
+.topbar {
+  height:46px; background:#fff; border-bottom:1px solid #e8eaf0;
+  display:flex; align-items:center; justify-content:flex-end;
+  padding:0 24px; font-size:13px; color:#555; gap:8px;
+}
+.content { flex:1; padding:18px 24px; overflow:hidden; }
+.breadcrumb { font-size:12px; color:#3b7ddd; margin-bottom:5px; }
+.page-title { font-size:19px; font-weight:700; color:#1a1f2e; margin-bottom:14px; }
+
+.tab-row { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e8eaf0; margin-bottom:14px; }
+.tabs { display:flex; }
+.tab { padding:9px 18px; font-size:13px; color:#888; cursor:pointer; border-bottom:2px solid transparent; }
+.tab.active { color:#3b7ddd; border-bottom-color:#3b7ddd; font-weight:600; }
+.actions { display:flex; gap:8px; align-items:center; padding-bottom:5px; }
+
+.btn { padding:7px 13px; border-radius:6px; font-size:12px; cursor:pointer; border:none; font-weight:500; display:flex; align-items:center; gap:5px; }
+.btn-outline { background:#fff; border:1px solid #d0d4de; color:#444; }
+.btn-primary { background:#3b7ddd; color:#fff; }
+.btn-bulk { background:#fff4e6; color:#d35400; border:1px solid #f0c080; font-weight:700; }
+.btn-bulk.pulse { animation:pulseBtn 1.4s ease-in-out 2; }
+@keyframes pulseBtn { 0%,100%{box-shadow:0 0 0 0 rgba(211,84,0,.4);} 50%{box-shadow:0 0 0 8px rgba(211,84,0,0);} }
+
+.toolbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.search-box { display:flex; align-items:center; gap:7px; background:#fff; border:1px solid #d0d4de; border-radius:6px; padding:6px 12px; width:280px; font-size:12.5px; color:#aaa; }
+.toolbar-right { display:flex; gap:7px; }
+
+.table-wrap { background:#fff; border-radius:8px; border:1px solid #e8eaf0; overflow:hidden; }
+table { width:100%; border-collapse:collapse; font-size:12.5px; }
+thead th { background:#fafbfc; padding:9px 12px; text-align:left; color:#888; font-weight:500; border-bottom:1px solid #e8eaf0; white-space:nowrap; }
+tbody td { padding:8px 12px; color:#333; border-bottom:1px solid #f0f2f7; }
+tbody tr:hover { background:#f8f9fd; }
+.dot { width:8px; height:8px; border-radius:50%; background:#2ecc71; display:inline-block; }
+.score { display:flex; align-items:center; gap:5px; color:#aaa; font-size:12px; }
+.score-x { width:15px; height:15px; border:1.5px solid #ccc; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; color:#aaa; }
+
+/* ── Overlay ── */
+.overlay { position:absolute; inset:0; background:rgba(15,20,40,.5); backdrop-filter:blur(3px); z-index:100; opacity:0; pointer-events:none; transition:opacity .35s; }
+.overlay.show { opacity:1; pointer-events:all; }
+
+/* ── Upload Modal ── */
+.modal {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%) scale(.88);
+  width:460px; background:#fff; border-radius:16px;
+  box-shadow:0 24px 64px rgba(0,0,0,.3);
+  z-index:200; padding:26px 26px 22px;
+  opacity:0; pointer-events:none;
+  transition:opacity .35s, transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.modal.show { opacity:1; pointer-events:all; transform:translate(-50%,-50%) scale(1); }
+
+.modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.modal-title { font-size:15px; font-weight:700; color:#1a1f2e; }
+.modal-close { width:26px; height:26px; border-radius:50%; background:#f0f2f7; border:none; cursor:pointer; font-size:13px; color:#666; display:flex; align-items:center; justify-content:center; }
+
+.drop-zone {
+  border:2px dashed #c5cde0; border-radius:12px;
+  padding:36px 20px; text-align:center; background:#f8f9fd;
+  transition:border-color .25s, background .25s; position:relative; cursor:pointer;
+  min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.drop-zone.drag-over { border-color:#3b7ddd; background:#eef4ff; animation:dpulse .6s ease-in-out infinite alternate; }
+@keyframes dpulse { from{border-color:#3b7ddd;} to{border-color:#7fb0f5;} }
+.drop-zone.completed { border-color:#2ecc71; background:#eafaf1; }
+.drop-icon { width:52px; height:52px; background:#eef4ff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:10px; }
+.drop-title { font-size:13.5px; font-weight:600; color:#1a1f2e; margin-bottom:3px; }
+.drop-sub { font-size:12px; color:#888; }
+.drop-sub span { color:#3b7ddd; font-weight:600; }
+
+.folder-preview { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0; pointer-events:none; text-align:center; transition:opacity .3s; }
+.folder-preview.show { opacity:1; }
+.folder-name { font-size:12px; color:#3b7ddd; margin-top:5px; font-weight:600; }
+
+/* file result row */
+.file-result {
+  display:flex; align-items:center; justify-content:space-between;
+  background:#f0f8ff; border:1px solid #b8d8f8; border-radius:8px;
+  padding:10px 14px; margin-top:14px; cursor:pointer;
+  opacity:0; transition:opacity .3s, transform .3s;
+  transform:translateY(6px);
+}
+.file-result.show { opacity:1; transform:translateY(0); }
+.file-result:hover { background:#e2f0fd; border-color:#3b7ddd; }
+.file-result-left { display:flex; align-items:center; gap:10px; }
+.file-icon { font-size:22px; }
+.file-info { display:flex; flex-direction:column; }
+.file-info-name { font-size:13px; font-weight:700; color:#1a1f2e; }
+.file-info-meta { font-size:11px; color:#888; }
+.file-result-right { font-size:11.5px; color:#3b7ddd; font-weight:600; display:flex; align-items:center; gap:4px; }
+
+/* progress */
+.upload-progress { margin-top:14px; display:none; }
+.upload-progress.show { display:block; }
+.prog-label { display:flex; justify-content:space-between; font-size:12px; color:#555; margin-bottom:5px; }
+.prog-bar-bg { height:6px; background:#e8eaf0; border-radius:10px; overflow:hidden; }
+.prog-bar { height:100%; background:linear-gradient(90deg,#3b7ddd,#6fa8f5); border-radius:10px; width:0%; transition:width .08s linear; }
+
+.modal-footer { margin-top:18px; display:flex; justify-content:flex-end; gap:10px; }
+.btn-cancel { background:#f0f2f7; color:#555; border:none; border-radius:6px; padding:7px 15px; cursor:pointer; font-size:13px; }
+.btn-submit { background:#3b7ddd; color:#fff; border:none; border-radius:6px; padding:7px 18px; cursor:pointer; font-size:13px; font-weight:600; opacity:.4; transition:opacity .2s, transform .1s; }
+.btn-submit.ready { opacity:1; }
+.btn-submit.click-anim { transform:scale(.93); }
+
+/* ── Excel Viewer Modal ── */
+.excel-modal {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%) scale(.88);
+  width:980px; max-height:600px;
+  background:#fff; border-radius:14px;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+  z-index:300; opacity:0; pointer-events:none;
+  transition:opacity .4s, transform .4s cubic-bezier(.34,1.4,.64,1);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.excel-modal.show { opacity:1; pointer-events:all; transform:translate(-50%,-50%) scale(1); }
+
+.excel-titlebar {
+  background:#1d6f42;
+  padding:12px 20px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0;
+}
+.excel-logo { display:flex; align-items:center; gap:10px; }
+.excel-logo-icon { background:#fff; color:#1d6f42; font-weight:900; font-size:13px; width:26px; height:26px; border-radius:4px; display:flex; align-items:center; justify-content:center; }
+.excel-logo-text { color:#fff; font-size:14px; font-weight:600; }
+.excel-filename { color:rgba(255,255,255,.8); font-size:12px; }
+.excel-close { background:rgba(255,255,255,.15); border:none; color:#fff; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; }
+
+.excel-toolbar {
+  background:#f3f9f5; border-bottom:1px solid #d6e8dc;
+  padding:6px 16px; display:flex; align-items:center; gap:16px;
+  flex-shrink:0;
+}
+.excel-toolbar-btn { padding:4px 10px; font-size:11.5px; background:#fff; border:1px solid #c8ddc8; border-radius:4px; color:#1d6f42; cursor:pointer; font-weight:600; }
+.excel-sheet-tab { background:#1d6f42; color:#fff; font-size:11px; font-weight:600; padding:3px 12px; border-radius:4px 4px 0 0; }
+
+.excel-grid-wrap { overflow:auto; flex:1; }
+.excel-grid { border-collapse:collapse; font-size:11.5px; min-width:100%; }
+.excel-grid th {
+  position:sticky; top:0;
+  background:#1d6f42; color:#fff;
+  padding:8px 10px; text-align:center; white-space:nowrap;
+  border-right:1px solid #2d8a52; font-weight:600;
+  font-size:11px;
+}
+.excel-grid td { padding:6px 10px; border:1px solid #e0eeea; white-space:nowrap; color:#1a1a1a; text-align:center; }
+.excel-grid tr:nth-child(even) td { background:#f3faf6; }
+.excel-grid tr:hover td { background:#e8f5ec; }
+.status-active { background:#c6efce !important; color:#276221; font-weight:600; border-radius:3px; padding:2px 7px; }
+.status-expired { background:#ffdce1 !important; color:#9b2335; font-weight:600; border-radius:3px; padding:2px 7px; }
+.status-pending { background:#ffeb9c !important; color:#9c5e00; font-weight:600; border-radius:3px; padding:2px 7px; }
+.excel-row-num { background:#f3f9f5 !important; color:#888; border-right:2px solid #d6e8dc !important; text-align:center; min-width:36px; font-size:10.5px; }
+.excel-cell { cursor:text; outline: none; }
+.excel-cell:focus {
+  outline: 2px solid #3b7ddd;
+  outline-offset: -2px;
+  background: #f3f8ff !important;
+}
+
+/* ── Cursor ── */
+.cursor { position:absolute; width:20px; height:20px; z-index:9999; pointer-events:none; }
+.cursor svg { width:100%; height:100%; filter:drop-shadow(0 1px 3px rgba(0,0,0,.4)); }
+
+/* ── Drag folder ghost ── */
+.dragging-folder {
+  position:absolute; padding:6px 12px; border-radius:8px;
+  background:#fff; box-shadow:0 4px 18px rgba(0,0,0,.2);
+  font-size:12px; font-weight:700; color:#3b7ddd;
+  display:flex; align-items:center; gap:7px;
+  pointer-events:none; opacity:0; z-index:9998; transition:opacity .25s;
+}
+.dragging-folder.show { opacity:1; }
+
+/* ── Step label ── */
+.step-label {
+  position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+  background:#1a1f2e; color:#fff; font-size:12px;
+  padding:5px 16px; border-radius:20px; white-space:nowrap;
+  opacity:0; transition:opacity .3s; z-index:400;
+}
+.step-label.show { opacity:1; }
+
+/* success badge */
+.success-badge { display:none; margin-top:12px; background:#eafaf1; border:1px solid #a9dfbf; border-radius:8px; padding:9px 14px; font-size:13px; color:#1e8449; align-items:center; gap:7px; }
+.success-badge.show { display:flex; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-logo">⚡ alt-mobility</div>
+  <div class="sidebar-item">📋 Leads</div>
+  <div class="sidebar-item">🚗 Fleet</div>
+  <div class="sidebar-item">📄 RC Fitness</div>
+  <div class="sidebar-item">🔋 Battery</div>
+  <div class="sidebar-item">📊 DCO</div>
+  <div class="sidebar-item">🔔 Alerts</div>
+  <div class="sidebar-item">🔧 Service</div>
+  <div class="sidebar-item">📈 Reports</div>
+  <div class="sidebar-item active">📦 Delivery Challan</div>
+  <div class="sidebar-item" style="padding-left:32px;font-size:11.5px;">IoT Connectivity</div>
+  <div class="sidebar-item" style="padding-left:32px;font-size:11.5px;">Mock Vehicle Conn.</div>
+  <div class="sidebar-item" style="padding-left:32px;font-size:11.5px;">Vehicle Connectivity</div>
+  <div class="sidebar-item" style="padding-left:32px;font-size:11.5px;color:#fff;">Vehicle Stocks</div>
+  <div class="sidebar-item" style="padding-left:32px;font-size:11.5px;">RRRR</div>
+  <div class="sidebar-item" style="padding-left:32px;font-size:11.5px;">EOL</div>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    👤 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d1bfb8bab9b8bd91b0bda5fcbcbeb3b8bdb8a5a8ffb2bebc">[email&#160;protected]</a>
+  </div>
+  <div class="content">
+    <div class="breadcrumb">Vehicle Stocks ›</div>
+    <div class="page-title">Delivery Challan</div>
+    <div class="tab-row">
+      <div class="tabs">
+        <div class="tab active">Unallocated Vehicle</div>
+        <div class="tab">Allocated Vehicle</div>
+        <div class="tab">Delivered Vehicle</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-outline">Add to Tranche/Fleet Req ▾</button>
+        <button class="btn btn-bulk" id="bulkBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Document Bulk Upload
+        </button>
+        <button class="btn btn-primary">+ Upload</button>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search by Chassis/Warehouse/Reg No
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-outline">Fetch Vehicle Details</button>
+        <button class="btn btn-outline">Export Data</button>
+        <button class="btn btn-outline">⚙ Filter</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px"><input type="checkbox"></th>
+            <th style="width:22px"></th>
+            <th>Chassis Number</th><th>Reg No</th><th>Asset Type</th>
+            <th>Make and Model</th><th>Warehouse Address</th><th>Document Upload Score</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Upload Modal -->
+<div class="modal" id="modal">
+  <div class="modal-header">
+    <div class="modal-title">📁 Document Bulk Upload</div>
+    <button class="modal-close">✕</button>
+  </div>
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3b7ddd" stroke-width="1.8" width="26" height="26"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    <div class="drop-title" id="dropTitle">Drag & Drop your folder here</div>
+    <div class="drop-sub" id="dropSub">or <span>browse to select</span> &nbsp;·&nbsp; ZIP / Folder supported</div>
+    <div class="folder-preview" id="folderPreview">
+      <svg width="60" height="60" viewBox="0 0 64 64" fill="none">
+        <path d="M2 23C2 20 4 18 7 18h20l5 6h25c3 0 5 2 5 5v22c0 3-2 5-5 5H7c-3 0-5-2-5-5V23z" fill="#3b7ddd" opacity=".7"/>
+        <path d="M2 28h60v24c0 3-2 5-5 5H7c-3 0-5-2-5-5V28z" fill="#3b7ddd"/>
+        <rect x="18" y="36" width="28" height="3" rx="1.5" fill="#fff" opacity=".6"/>
+        <rect x="18" y="43" width="20" height="3" rx="1.5" fill="#fff" opacity=".4"/>
+      </svg>
+      <div class="folder-name">Documents_MVS7.zip</div>
+    </div>
+  </div>
+
+  <div class="upload-progress" id="uploadProgress">
+    <div class="prog-label"><span>Uploading Documents_MVS7.zip…</span><span id="progPct">0%</span></div>
+    <div class="prog-bar-bg"><div class="prog-bar" id="progBar"></div></div>
+  </div>
+
+  <div class="success-badge" id="successBadge">✅ &nbsp;Upload complete — 20 documents processed.</div>
+
+  <!-- File result card (appears after upload) -->
+  <div class="file-result" id="fileResult">
+    <div class="file-result-left">
+      <div class="file-icon">📊</div>
+      <div class="file-info">
+        <div class="file-info-name">Vehicle Details.xlsx</div>
+        <div class="file-info-meta">20 vehicles · 18 fields · 42 KB</div>
+      </div>
+    </div>
+    <div class="file-result-right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Preview
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn-cancel">Cancel</button>
+    <button class="btn-submit" id="submitBtn">Submit</button>
+  </div>
+</div>
+
+<!-- Excel Modal -->
+<div class="excel-modal" id="excelModal">
+  <div class="excel-titlebar">
+    <div class="excel-logo">
+      <div class="excel-logo-icon">X</div>
+      <div class="excel-logo-text">Microsoft Excel</div>
+    </div>
+    <div class="excel-filename">Vehicle Details.xlsx — Editable Preview</div>
+    <button class="excel-close" id="excelClose">✕</button>
+  </div>
+  <div class="excel-toolbar">
+    <button class="excel-toolbar-btn">📋 Copy</button>
+    <button class="excel-toolbar-btn">🔍 Find</button>
+    <button class="excel-toolbar-btn">📥 Download</button>
+    <div style="flex:1"></div>
+    <div class="excel-sheet-tab">Vehicle Documents</div>
+  </div>
+  <div class="excel-grid-wrap">
+    <table class="excel-grid" id="excelTable"></table>
+  </div>
+</div>
+
+<!-- Drag ghost -->
+<div class="dragging-folder" id="draggingFolder">
+  <svg viewBox="0 0 24 24" fill="#3b7ddd" width="16" height="16"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+  Documents_MVS7.zip
+</div>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor">
+  <svg viewBox="0 0 24 24" fill="#1a1f2e" stroke="#fff" stroke-width=".5">
+    <path d="M4 2l16 10-8 2-4 8z"/>
+  </svg>
+</div>
+
+<!-- Step label -->
+<div class="step-label" id="stepLabel"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── Table data ──
+const chassis = ['MD92N41SKDB639071','MD92N41SKDB639082','MD92N41SKDB639098','MD92N41SKDB639106',
+  'MD92N41SKDB639118','MD92N41SKDB639134','MD92N41SKDB639138','MD92N41SKDB639146',
+  'MD92N41SKDB639149','MD92N41SKDB639153'];
+const tbody = document.getElementById('tableBody');
+chassis.forEach(c => {
+  tbody.innerHTML += `<tr><td><input type="checkbox"></td><td><span class="dot"></span></td>
+    <td>${c}</td><td></td><td style="color:#aaa">Vehicle</td>
+    <td>Motovolt_MVS7</td><td></td>
+    <td><div class="score"><span class="score-x">✕</span>0/2</div></td></tr>`;
+});
+
+// ── Excel data ──
+const excelData = [["Insurer","Policy No.","Start Date","End Date","Coverage","Insured Value (Rs.)","Premium (Rs.)","Renewal Scope","Insured Name","Hypothecation","TPC Start Date","TPC End Date","OD Start Date","OD End Date","Created Date","Modified Date","Status","Chassis Number"],["Tata AIG","POL70052013","02-03-2023","02-03-2024","Comprehensive","105000","4254","Annual","Rajesh Kumar","Axis Bank Ltd","02-03-2023","02-03-2024","02-03-2023","02-03-2024","15-06-2024","30-06-2024","Active","MD92N41SKDB639071"],["Bajaj Allianz","POL18468403","24-05-2023","24-05-2024","Third Party","90000","3925","Annual","Priya Sharma","Yes Bank","24-05-2023","24-05-2024","24-05-2023","24-05-2024","08-06-2024","30-06-2024","Active","MD92N41SKDB639082"],["United India","POL43843288","07-11-2023","07-11-2024","OD Only","95000","4071","Annual","Amit Singh","Kotak Mahindra","07-11-2023","07-11-2024","07-11-2023","07-11-2024","09-01-2024","19-01-2024","Active","MD92N41SKDB639098"],["New India Assurance","POL14641509","19-07-2023","19-07-2024","Comprehensive","85000","2358","Annual","Sunita Patel","Axis Bank Ltd","19-07-2023","19-07-2024","19-07-2023","19-07-2024","02-06-2024","11-06-2024","Expired","MD92N41SKDB639106"],["HDFC Ergo","POL74425584","17-11-2023","17-11-2024","Comprehensive","100000","3292","Annual","Vikram Mehta","Bank of Baroda","17-11-2023","17-11-2024","17-11-2023","17-11-2024","03-02-2024","09-02-2024","Pending Renewal","MD92N41SKDB639118"],["HDFC Ergo","POL51931076","15-11-2023","15-11-2024","Comprehensive","90000","3905","Annual","Deepa Nair","Kotak Mahindra","15-11-2023","15-11-2024","15-11-2023","15-11-2024","19-02-2024","01-03-2024","Active","MD92N41SKDB639134"],["Bajaj Allianz","POL18086591","01-06-2023","01-06-2024","Third Party","105000","3361","Annual","Arjun Reddy","Yes Bank","01-06-2023","01-06-2024","01-06-2023","01-06-2024","13-06-2024","20-06-2024","Active","MD92N41SKDB639138"],["United India","POL83532554","07-03-2023","07-03-2024","OD Only","110000","3271","Annual","Neha Gupta","PNB","07-03-2023","07-03-2024","07-03-2023","07-03-2024","13-02-2024","10-03-2024","Active","MD92N41SKDB639146"],["HDFC Ergo","POL10570126","22-09-2023","22-09-2024","Comprehensive","105000","2894","Annual","Sanjay Joshi","SBI","22-09-2023","22-09-2024","22-09-2023","22-09-2024","13-03-2024","21-03-2024","Expired","MD92N41SKDB639149"],["HDFC Ergo","POL19468827","04-02-2023","04-02-2024","Comprehensive","85000","2735","Annual","Kavita Rao","SBI","04-02-2023","04-02-2024","04-02-2023","04-02-2024","01-01-2024","24-01-2024","Pending Renewal","MD92N41SKDB639153"],["Oriental Insurance","POL21876165","25-08-2023","25-08-2024","Comprehensive","100000","3860","Annual","Manoj Tiwari","Bank of Baroda","25-08-2023","25-08-2024","25-08-2023","25-08-2024","15-06-2024","17-06-2024","Active","MD92N41SKDB639158"],["Oriental Insurance","POL14365031","14-06-2023","14-06-2024","Third Party","95000","4041","Annual","Anita Desai","PNB","14-06-2023","14-06-2024","14-06-2023","14-06-2024","10-05-2024","21-05-2024","Active","MD92N41SKDB639162"],["United India","POL63351165","15-03-2023","15-03-2024","OD Only","105000","4489","Annual","Ravi Verma","Yes Bank","15-03-2023","15-03-2024","15-03-2023","15-03-2024","02-05-2024","11-05-2024","Active","MD92N41SKDB639175"],["National Insurance","POL51078162","01-04-2023","01-04-2024","Comprehensive","90000","2856","Annual","Pooja Iyer","ICICI Bank","01-04-2023","01-04-2024","01-04-2023","01-04-2024","13-01-2024","29-01-2024","Expired","MD92N41SKDB639181"],["United India","POL17683462","12-11-2023","12-11-2024","Comprehensive","95000","2643","Annual","Suresh Nair","Yes Bank","12-11-2023","12-11-2024","12-11-2023","12-11-2024","28-05-2024","10-06-2024","Pending Renewal","MD92N41SKDB639190"],["National Insurance","POL33371365","07-06-2023","07-06-2024","Comprehensive","100000","2717","Annual","Meena Pillai","HDFC Bank Ltd","07-06-2023","07-06-2024","07-06-2023","07-06-2024","12-02-2024","07-03-2024","Active","MD92N41SKDB639204"],["United India","POL98431981","22-12-2023","22-12-2024","Third Party","85000","2341","Annual","Arun Das","PNB","22-12-2023","22-12-2024","22-12-2023","22-12-2024","26-02-2024","05-03-2024","Active","MD92N41SKDB639211"],["Oriental Insurance","POL66954768","22-09-2023","22-09-2024","OD Only","100000","3521","Annual","Swati Kulkarni","ICICI Bank","22-09-2023","22-09-2024","22-09-2023","22-09-2024","22-04-2024","19-05-2024","Active","MD92N41SKDB639225"],["New India Assurance","POL78764158","25-07-2023","25-07-2024","Comprehensive","100000","2670","Annual","Kiran Bhat","SBI","25-07-2023","25-07-2024","25-07-2023","25-07-2024","09-06-2024","01-07-2024","Expired","MD92N41SKDB639239"],["Tata AIG","POL46719599","04-01-2023","04-01-2024","Comprehensive","110000","3473","Annual","Rohit Malhotra","Axis Bank Ltd","04-01-2023","04-01-2024","04-01-2023","04-01-2024","15-02-2024","21-02-2024","Pending Renewal","MD92N41SKDB639247"]];
+
+// Build Excel table (editable preview)
+const et = document.getElementById('excelTable');
+const thead = document.createElement('thead');
+const hRow = document.createElement('tr');
+hRow.innerHTML = '<th class="excel-row-num">#</th>' + excelData[0].map(h=>`<th>${h}</th>`).join('');
+thead.appendChild(hRow);
+et.appendChild(thead);
+const tbodyEx = document.createElement('tbody');
+for(let i=1;i<excelData.length;i++){
+  const row = excelData[i];
+  const tr = document.createElement('tr');
+
+  const rowNumTd = document.createElement('td');
+  rowNumTd.className = 'excel-row-num';
+  rowNumTd.textContent = i;
+  tr.appendChild(rowNumTd);
+
+  row.forEach((v,ci)=>{
+    const td = document.createElement('td');
+    td.classList.add('excel-cell');
+    td.dataset.row = String(i);
+    td.dataset.col = String(ci);
+    td.contentEditable = 'true';
+
+    if(ci===16){
+      const cls = v==='Active'?'status-active':v==='Expired'?'status-expired':'status-pending';
+      td.classList.add(cls);
+      td.textContent = v;
+    } else if(ci===5||ci===6){
+      td.style.fontFamily = 'monospace';
+      td.textContent = `₹${Number(v).toLocaleString('en-IN')}`;
+    } else {
+      td.textContent = v;
+    }
+    tr.appendChild(td);
+  });
+
+  tbodyEx.appendChild(tr);
+}
+et.appendChild(tbodyEx);
+
+function normalizeStatus(raw){
+  const x = String(raw ?? '').trim();
+  const key = x.toLowerCase();
+  if(key==='active') return 'Active';
+  if(key==='expired') return 'Expired';
+  if(key==='pending renewal' || key==='pendingrenewal' || key==='pending') return 'Pending Renewal';
+  return x;
+}
+
+function updateExcelDataFromCell(td){
+  const r = Number(td.dataset.row);
+  const c = Number(td.dataset.col);
+  let text = String(td.textContent ?? '').trim();
+
+  if(c===5||c===6){
+    const digits = text.replace(/[^\d]/g,'');
+    excelData[r][c] = digits === '' ? '' : String(Number(digits));
+    td.textContent = digits === '' ? '' : `₹${Number(digits).toLocaleString('en-IN')}`;
+    return;
+  }
+
+  if(c===16){
+    const status = normalizeStatus(text);
+    td.classList.remove('status-active','status-expired','status-pending');
+    td.classList.add(status==='Active' ? 'status-active' : status==='Expired' ? 'status-expired' : 'status-pending');
+    td.textContent = status;
+    excelData[r][c] = status;
+    return;
+  }
+
+  excelData[r][c] = text;
+}
+
+// Sync edited cells back into `excelData`
+et.addEventListener('focusout', (e)=>{
+  const td = e.target;
+  if(!(td instanceof HTMLElement)) return;
+  if(!td.matches('td.excel-cell')) return;
+  updateExcelDataFromCell(td);
+});
+
+// ── Animation ──
+const cursor = document.getElementById('cursor');
+const overlay = document.getElementById('overlay');
+const modal = document.getElementById('modal');
+const bulkBtn = document.getElementById('bulkBtn');
+const dropZone = document.getElementById('dropZone');
+const folderPreview = document.getElementById('folderPreview');
+const draggingFolder = document.getElementById('draggingFolder');
+const uploadProgress = document.getElementById('uploadProgress');
+const progBar = document.getElementById('progBar');
+const progPct = document.getElementById('progPct');
+const successBadge = document.getElementById('successBadge');
+const fileResult = document.getElementById('fileResult');
+const submitBtn = document.getElementById('submitBtn');
+const stepLabel = document.getElementById('stepLabel');
+const excelModal = document.getElementById('excelModal');
+const excelClose = document.getElementById('excelClose');
+
+let cx=900,cy=500;
+cursor.style.left=cx+'px';
+cursor.style.top=cy+'px';
+
+function moveCursor(tx,ty,dur){
+  return new Promise(res=>{
+    const sx=cx,sy=cy,steps=Math.round(dur/16);
+    let i=0;
+    const iv=setInterval(()=>{
+      i++;
+      const t=i/steps, e=t<.5?2*t*t:-1+(4-2*t)*t;
+      cx=sx+(tx-sx)*e; cy=sy+(ty-sy)*e;
+      cursor.style.left=cx+'px'; cursor.style.top=cy+'px';
+      draggingFolder.style.left=(cx+14)+'px'; draggingFolder.style.top=(cy+12)+'px';
+      if(i>=steps){clearInterval(iv);res();}
+    },16);
+  });
+}
+
+function moveCursorToElement(el,dur){
+  const r = el.getBoundingClientRect();
+  const tx = r.left + r.width/2;
+  const ty = r.top + r.height/2;
+  return moveCursor(tx,ty,dur);
+}
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+function showLabel(t){stepLabel.textContent=t;stepLabel.classList.add('show');}
+function hideLabel(){stepLabel.classList.remove('show');}
+
+function animateProgress(){
+  return new Promise(res=>{
+    let pct=0;
+    const iv=setInterval(()=>{
+      pct+=Math.random()*5+1.5;
+      if(pct>=100){pct=100;clearInterval(iv);res();}
+      progBar.style.width=pct+'%';
+      progPct.textContent=Math.round(pct)+'%';
+    },55);
+  });
+}
+
+function resetAll(){
+  overlay.classList.remove('show');
+  modal.classList.remove('show');
+  excelModal.classList.remove('show');
+  dropZone.className='drop-zone';
+  folderPreview.classList.remove('show');
+  document.getElementById('dropTitle').textContent='Drag & Drop your folder here';
+  document.getElementById('dropSub').style.opacity='1';
+  uploadProgress.classList.remove('show');
+  progBar.style.width='0%'; progPct.textContent='0%';
+  successBadge.classList.remove('show');
+  fileResult.classList.remove('show');
+  submitBtn.classList.remove('ready');
+  submitBtn.textContent='Submit'; submitBtn.style.background='';
+  draggingFolder.classList.remove('show');
+  cx=900;cy=500;
+  cursor.style.left=cx+'px'; cursor.style.top=cy+'px';
+  hideLabel();
+}
+
+async function runAnimation(){
+  await delay(700);
+
+  // Step 1: Click Document Bulk Upload
+  showLabel('Step 1 – Click "Document Bulk Upload"');
+  bulkBtn.classList.add('pulse');
+  await moveCursor(980,162,900);
+  await delay(250);
+  cursor.style.transform='scale(.8)'; setTimeout(()=>cursor.style.transform='',150);
+  overlay.classList.add('show'); modal.classList.add('show');
+  await delay(600); hideLabel(); bulkBtn.classList.remove('pulse');
+
+  // Step 2: Drag folder
+  await delay(500);
+  showLabel('Step 2 – Drag & drop the Documents folder');
+  cx=320; cy=70; cursor.style.left=cx+'px'; cursor.style.top=cy+'px';
+  await delay(400);
+  draggingFolder.classList.add('show');
+  draggingFolder.style.left=(cx+14)+'px'; draggingFolder.style.top=(cy+12)+'px';
+  await moveCursor(640,348,1300);
+
+  dropZone.classList.add('drag-over');
+  document.getElementById('dropTitle').style.opacity='0';
+  document.getElementById('dropSub').style.opacity='0';
+  await delay(550);
+
+  // Drop
+  draggingFolder.classList.remove('show');
+  dropZone.classList.remove('drag-over');
+  dropZone.classList.add('completed');
+  folderPreview.classList.add('show');
+  document.getElementById('dropTitle').style.opacity='1';
+  document.getElementById('dropTitle').textContent='Folder dropped!';
+  submitBtn.classList.add('ready');
+  hideLabel();
+  await delay(650);
+
+  // Step 3: Submit
+  showLabel('Step 3 – Click Submit to upload');
+  await moveCursor(797,568,700);
+  await delay(280);
+  cursor.style.transform='scale(.8)'; setTimeout(()=>cursor.style.transform='',150);
+
+  uploadProgress.classList.add('show');
+  hideLabel(); showLabel('Uploading…');
+  await animateProgress();
+
+  hideLabel();
+  successBadge.classList.add('show');
+  submitBtn.textContent='✓ Done'; submitBtn.style.background='#2ecc71';
+  await delay(700);
+
+  // Show file result card
+  fileResult.classList.add('show');
+  await delay(1000);
+
+  // Step 4: Click Preview to open Excel
+  showLabel('Step 4 – Click "Preview" to view extracted data');
+  // file result card is inside modal, roughly at y≈520
+  await moveCursor(800,528,800);
+  await delay(350);
+  cursor.style.transform='scale(.8)'; setTimeout(()=>cursor.style.transform='',150);
+  hideLabel();
+
+  // Open Excel modal (overlaid on everything)
+  await delay(300);
+  excelModal.classList.add('show');
+  showLabel('📊 Extracted Vehicle Document Data – 20 vehicles');
+  await delay(1600);
+
+  // Step 4b: Edit one Hypothecation field (row 1, col 9)
+  const tdHypo = document.querySelector('td.excel-cell[data-row="1"][data-col="9"]');
+  showLabel('Step 4b – Edit Hypothecation');
+  if(tdHypo){
+    await moveCursorToElement(tdHypo,800);
+    await delay(250);
+    cursor.style.transform='scale(.8)'; setTimeout(()=>cursor.style.transform='',150);
+
+    // Simulate typing by updating the contenteditable cell.
+    tdHypo.focus();
+    tdHypo.textContent = 'Axis Bank Ltd (Updated)';
+    updateExcelDataFromCell(tdHypo);
+    await delay(250);
+    tdHypo.blur();
+    await delay(600);
+  } else {
+    await delay(800);
+  }
+
+  // Scroll the excel table
+  const gridWrap = document.querySelector('.excel-grid-wrap');
+  hideLabel(); showLabel('Scrolling through records…');
+  for(let s=0;s<300;s+=10){
+    gridWrap.scrollTop=s;
+    await delay(30);
+  }
+  await delay(800);
+  for(let s=300;s>=0;s-=15){
+    gridWrap.scrollTop=s;
+    await delay(25);
+  }
+
+  hideLabel();
+  await delay(1500);
+
+  // Step 5: Close Excel
+  showLabel('Step 5 – Close preview');
+  await moveCursor(1057,78,600);
+  await delay(300);
+  cursor.style.transform='scale(.8)'; setTimeout(()=>cursor.style.transform='',150);
+  excelModal.classList.remove('show');
+  hideLabel();
+
+  // Step 5b: Click Done (Submit button in upload modal)
+  showLabel('Step 5b – Click ✓ Done');
+  await delay(200);
+  if(submitBtn){
+    await moveCursorToElement(submitBtn,700);
+    await delay(220);
+    cursor.style.transform='scale(.8)'; setTimeout(()=>cursor.style.transform='',150);
+    submitBtn.click(); // no-op now, but keeps behavior correct if handlers are added later
+    await delay(450);
+  } else {
+    await delay(650);
+  }
+  hideLabel();
+  await delay(1200);
+
+  // Reset and loop
+  resetAll();
+  setTimeout(runAnimation,1200);
+}
+
+setTimeout(runAnimation,1000);
+</script>
+</body>
+</html>
