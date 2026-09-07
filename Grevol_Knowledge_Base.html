@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Grevol — Consolidated Knowledge Base</title>
+<style>
+  :root{
+    --bg:#0f1115; --card:#161a22; --border:#2a2f3a; --text:#e8eaed;
+    --muted:#9aa3b2; --accent:#5b8cff; --accent2:#3ddc97; --warn:#ffb547;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;}
+  header{padding:32px 24px 20px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#141824,#0f1115);}
+  header h1{margin:0 0 6px;font-size:24px;}
+  header p{margin:0;color:var(--muted);font-size:14px;max-width:900px;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  nav.toc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin:24px 0;}
+  nav.toc h2{margin:0 0 10px;font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:.05em;}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:32px;}
+  nav.toc li{margin-bottom:6px;font-size:14px;}
+  nav.toc a{color:var(--text);text-decoration:none;border-bottom:1px dotted var(--muted);}
+  nav.toc a:hover{color:var(--accent);}
+  section{margin:40px 0 52px;}
+  section h2{font-size:20px;margin:0 0 4px;display:flex;align-items:center;gap:10px;}
+  section h2 .tag{font-size:11px;font-weight:700;color:#0f1115;background:var(--accent2);padding:2px 8px;border-radius:999px;text-transform:uppercase;}
+  section p.desc{color:var(--muted);font-size:14px;margin:6px 0 18px;max-width:880px;}
+  section p.src{color:var(--muted);font-size:12px;margin:0 0 18px;font-style:italic;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:18px;}
+  h3{font-size:15px;margin:0 0 10px;color:var(--accent2);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:8px;}
+  th{background:#1c2130;color:var(--text);text-align:left;padding:8px 10px;border:1px solid var(--border);font-size:12.5px;text-transform:uppercase;letter-spacing:.02em;}
+  td{padding:8px 10px;border:1px solid var(--border);vertical-align:top;color:#dbe0ea;}
+  tr:nth-child(even) td{background:#12151d;}
+  .pill{display:inline-block;background:#1c2130;border:1px solid var(--border);color:var(--accent2);font-size:11px;padding:2px 8px;border-radius:999px;margin:2px 4px 2px 0;}
+  .callout{border-left:3px solid var(--accent);background:#141a2b;padding:12px 16px;border-radius:6px;font-size:13.5px;color:#cfd6e6;margin-top:10px;}
+  .callout b{color:var(--accent2);}
+  .warncallout{border-left:3px solid var(--warn);background:#241c14;padding:12px 16px;border-radius:6px;font-size:13.5px;color:#f0dcc0;margin-top:10px;}
+  .warncallout b{color:var(--warn);}
+  .confirm{color:var(--warn);font-weight:700;font-size:11.5px;}
+  a.back-top{display:inline-block;margin-top:10px;font-size:12px;color:var(--muted);text-decoration:none;}
+  a.back-top:hover{color:var(--accent);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:800px){.grid2{grid-template-columns:1fr;} nav.toc ol{columns:1;}}
+  footer{border-top:1px solid var(--border);padding:24px;color:var(--muted);font-size:13px;text-align:center;}
+  code{background:#1c2130;padding:1px 6px;border-radius:4px;font-size:12.5px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Grevol — Consolidated Knowledge Base</h1>
+    <p>Everything from your six source files, cleaned up, de-duplicated, and organized into one reference. Where two sources disagreed on a number, both are shown with a flag rather than silently picking one — see Section 10.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc" id="top">
+  <h2>Index</h2>
+  <ol>
+    <li><a href="#s1">Dealer Network &amp; Coverage Areas</a></li>
+    <li><a href="#s2">Product Specifications — Cargo vs Passenger</a></li>
+    <li><a href="#s3">Pricing, Lease &amp; Down Payment Structure</a></li>
+    <li><a href="#s4">Competitor Comparison</a></li>
+    <li><a href="#s5">Documents &amp; Eligibility Checklist</a></li>
+    <li><a href="#s6">Warranty &amp; AMC Coverage</a></li>
+    <li><a href="#s7">Sales Discovery &amp; Pitch Framework</a></li>
+    <li><a href="#s8">Customer FAQ &amp; Objection Bank</a></li>
+    <li><a href="#s9">Call-Handling Insights (QA Transcript Pack)</a></li>
+    <li><a href="#s10">Data Quality Notes — Conflicts to Resolve</a></li>
+  </ol>
+</nav>
+
+<!-- ============ SECTION 1 ============ -->
+<section id="s1">
+  <h2>1. Dealer Network &amp; Coverage Areas <span class="tag">Locations</span></h2>
+  <p class="desc">Every dealership, its address, contact person, and the exact localities it covers. This is the source table your voice agent should use for locality-level serviceability matching (see the flowchart's Location &amp; Serviceability flow).</p>
+  <p class="src">Source: Dealer_name_with_area_wise.xlsx</p>
+
+  <div class="card">
+    <table>
+      <tr><th>Dealership</th><th>Location</th><th>Contact</th><th>Phone</th><th>Areas Covered</th></tr>
+      <tr><td>Eco - Cruise</td><td>Bhajanpura</td><td>Vandana</td><td>9217701155</td><td>East Delhi — Karawal Nagar, Mustafabad, Khajuri Khas, Yamuna Vihar, Gokulpuri, Maujpur, Ghonda, Babarpur, Khichdi Pur, I.P. Extension, Sonia Vihar, Dilshad Garden, Seelampur, Jafrabad, Vivek Vihar, Preet Vihar, Usmanpur, Krishna Nagar</td></tr>
+      <tr><td>—</td><td>Azadpur</td><td>Riya</td><td>9211704499</td><td>North Delhi — Burari, Azadpur, Jahangirpuri, Bawana, Ali Gaon, Narela, Shalimar Bagh, Pritampura, Mangol Puri, Ali Pur, Holambi Kalan</td></tr>
+      <tr><td>—</td><td>Uttam Nagar</td><td>Anita</td><td>9217706655</td><td>West Delhi — Rajouri Garden, Tagore Garden, Subhash Nagar, Tilak Nagar, Janakpuri, Uttam Nagar, Dwarka, Nihal Vihar, Paschim Vihar, Nangloi, Mundka, Tigri, Najafgarh, Sagar Pur, Keshav Puram, Tikri Kalan, Vikas Puri, Punjabi Bagh, Mayapuri, Raja Garden, Moti Nagar, Kirti Nagar</td></tr>
+      <tr><td>Saffal India</td><td>Ballabgarh</td><td>Vivek</td><td>7827908343</td><td>Faridabad &amp; Ballabgarh</td></tr>
+      <tr><td>Rupam Automobiles</td><td>Noida</td><td>Nikhil / Mukesh / Vanshika</td><td>8130565215 / 8595653750 / 9217660076</td><td>Noida, Mayur Vihar Phase 1/2/3, Trilokpuri, Mandawali, Vinod Nagar, Patparganj, Kalyan Puri, Shakarpur</td></tr>
+      <tr><td>Santosh Tyres &amp; Wheels</td><td>Vishwas Nagar</td><td>Manish</td><td>8448990660 / 9053070601</td><td>East Delhi — Krishna Nagar, Geeta Colony, Shahdara, Mandawali, New Ashok Nagar, Trilokpuri, Khichripur, Karkarduma, Mansarovar Park, Welcome, Raj Bagh, Shalimar City, Vijay Nagar, Ghazipur, Laxmi Nagar, Jhandapur, Mohan Nagar</td></tr>
+      <tr><td>—</td><td>Faridabad</td><td>—</td><td>—</td><td>Faridabad</td></tr>
+      <tr><td>—</td><td>Greater Noida</td><td>—</td><td>—</td><td>Greater Noida / Noida Extension — Pawan Dadri, Surajpur, Pari Chowk, Tilapta, Devla, Sutiyana, Bisrakh, Roza Jalalpur, Aimnabad, Patwari, Chipyana Buzurg, Kulesara, Haldoni, Shahberi, Habibpur, Saini</td></tr>
+      <tr><td>Prithvi EV World</td><td>Faridabad</td><td>Saurabh</td><td>9953460891</td><td>Faridabad</td></tr>
+      <tr><td>Shree Ji Automobile</td><td>Rithala – Jhakira</td><td>Ayush / Prateek / Bhumi / Anjali</td><td>9354330313 / 9711699322 / 9990266991 / 8587949791</td><td>North / North-West Delhi — Rithala, Rohini, Budh Vihar, Rani Bagh, Shakurpur, Karala, Kanjhawala, Pitampura, Ashok Vihar, Patel Nagar, Moti Nagar, Karol Bagh, Sadar Bazar, Mukherjee Nagar, Burari, Bawana, Wazirabad, Inderpuri, Nangloi, Mundka, Sultanpuri, Tikri Kalan, Madipur, Anand Parbat, Mangolpuri, Pashchim Vihar, Ashok Park Main, Nizampur, Vikaspuri, Tikri Border, Krishna Park, Shakti Nagar, Kamla Nagar, Rani Khera, Dariyaganj, Red Fort, Timarpur, Shadipur, Baljeet Nagar, Karampura, Pahar Ganj <span class="pill">65+ micro-localities — see raw file for full list</span></td></tr>
+      <tr><td>MVP</td><td>Gurgaon</td><td>Prince</td><td>7303210421</td><td>Gurgaon</td></tr>
+      <tr><td>—</td><td>Shahpura</td><td>Rajender</td><td>7728909167</td><td>Shahpura</td></tr>
+      <tr><td>Nav Bharat Trading</td><td>Sonipat</td><td>—</td><td>—</td><td>Sonipat</td></tr>
+      <tr><td>COCO</td><td>Ghaziabad</td><td>Kapil / Hamza / Uday / Rahul</td><td>9810900074 / 9560167402 / 9213464441 / 6283228736</td><td>Ghaziabad</td></tr>
+      <tr><td>—</td><td>Okhla</td><td>Manoj / Imtiyaz / Sagar</td><td>7827104035 / 9971914472 / 8860225262</td><td>Delhi (Okhla area)</td></tr>
+      <tr><td>—</td><td>Jaipur</td><td>Khushi Khan / Laxmi</td><td>8619613822 / 8796776805</td><td>Jaipur — KVI Nagar, Subhash Nagar, Sikar</td></tr>
+      <tr><td>—</td><td>Dehradun</td><td>Arifa / Kajal</td><td>8796894729 / 8796894727</td><td>Dehradun, Roorkee</td></tr>
+      <tr><td>—</td><td>Lucknow</td><td>Vinod</td><td>8707012243</td><td>Bara Banki City, Deva Road, Kursi, Behta, Matiyari, Gomti Nagar, Chinhat, Jankipuram, Kalli, Vrindavan Colony, Chowk, BKT, Ashiyana, Dubagga, Para, Krishna Nagar, Telibagh, Indira Nagar, Ahmahau, Mahanagar, Madiaon, Buddheshwar, Amausi, Transport Nagar, Utrathiya, Itaunja, Bijnor</td></tr>
+      <tr><td>—</td><td>Roorkee</td><td>—</td><td>—</td><td>Roorkee</td></tr>
+      <tr><td>—</td><td>Sikar</td><td>—</td><td>—</td><td>Sikar</td></tr>
+      <tr><td>—</td><td>Haridwar</td><td>—</td><td>—</td><td>Haridwar</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Supplementary — Sales Agent Directory (from training module)</h3>
+    <p class="src" style="margin-top:-6px">Source: Vipul_Training_Module.xlsx → Sheet1. Adds the assigned sales agent + branch officer (BO) per dealership. A few location labels here differ slightly from the table above — flagged in Section 10.</p>
+    <table>
+      <tr><th>Agent</th><th>Agent Phone</th><th>Dealership</th><th>Location</th><th>BO Name</th><th>BO Phone</th></tr>
+      <tr><td>Anil</td><td>9711305707</td><td>Eco - Cruise</td><td>Bhajanpura</td><td>Ashish / Uday</td><td>9213464441 / 6398218592</td></tr>
+      <tr><td>Imtiyaz</td><td>9131967645</td><td>—</td><td>Azadpur</td><td>Sukhwinder</td><td>8860138478</td></tr>
+      <tr><td>Rahul</td><td>6283228736</td><td>—</td><td>Uttam Nagar</td><td>Prateek / Sunil</td><td>8595544056 / 8285452906</td></tr>
+      <tr><td>Kapil</td><td>9810900074</td><td>Saffal India</td><td>Ballabgarh</td><td>Shubham</td><td>9319617101</td></tr>
+      <tr><td>Vikas</td><td>9599495042</td><td>Rupam Automobiles</td><td>Noida</td><td>Rahul</td><td>6283228736</td></tr>
+      <tr><td>Manoj</td><td>7827104035</td><td>Santosh Tyres &amp; Wheels</td><td><span class="confirm">Ghaziabad (⚠ see note)</span></td><td>Mayank</td><td>9053070601</td></tr>
+      <tr><td>Sagar</td><td>8860225262</td><td>—</td><td>Delhi (North Eastern)</td><td>—</td><td>—</td></tr>
+      <tr><td>Pratik</td><td>8595544056</td><td>—</td><td>Pawan Dadri</td><td>—</td><td>—</td></tr>
+      <tr><td>Aniket</td><td>9755234045</td><td>—</td><td>MM Enterprise (Ghaziabad belt)</td><td>—</td><td>—</td></tr>
+      <tr><td>Sunil</td><td>8285452906</td><td>—</td><td>Tigri / Greater Noida belt</td><td>—</td><td>—</td></tr>
+      <tr><td>Uday</td><td>9213464441</td><td>Prithvi EV World</td><td>Faridabad</td><td>Pratik / Aniket</td><td>9755234045</td></tr>
+      <tr><td>Shubham</td><td>9319617101</td><td>Shree Ji</td><td>Rithala</td><td>—</td><td>—</td></tr>
+    </table>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section id="s2">
+  <h2>2. Product Specifications — Cargo vs Passenger <span class="tag">Specs</span></h2>
+  <p class="desc">Cargo and Loader are the same product (10 kWh variant). Passenger comes in two seating configs — D+3 and D+6 — both 16 kWh.</p>
+  <p class="src">Source: SPECS_SHEET (C-10kW / P-16kW).xlsx — treated as the primary/official spec sheet.</p>
+
+  <div class="card">
+    <h3>Cargo / Loader — EVAUM (L5N)</h3>
+    <table>
+      <tr><th>Attribute</th><th>Value</th></tr>
+      <tr><td>Vehicle model</td><td>EVAUM</td></tr>
+      <tr><td>Category</td><td>L5N</td></tr>
+      <tr><td>Seating</td><td>D (driver only)</td></tr>
+      <tr><td>Load body</td><td>Covered light-weight composite · 2050 mm (L) × 1480 mm (W) × 1530 mm (H)</td></tr>
+      <tr><td>Wheelbase / ground clearance / turning radius</td><td>2290 mm / 220 mm / 3.05 m</td></tr>
+      <tr><td>Payload</td><td>750 kg</td></tr>
+      <tr><td>Gross weight</td><td>1350 kg</td></tr>
+      <tr><td>Vehicle L × W × H</td><td>3610 × 1510 × 2280 mm</td></tr>
+      <tr><td>Wheels</td><td>4.5–10" front &amp; rear</td></tr>
+      <tr><td>Max speed</td><td>45 kmph</td></tr>
+      <tr><td>Range</td><td>120–140 km real-world · 130 km certified</td></tr>
+      <tr><td>Gradeability</td><td>0.12</td></tr>
+      <tr><td>Battery</td><td>1 × 10.24 kWh LFP, 51.2V, 200 Ah</td></tr>
+      <tr><td>Charging</td><td>Standard 4 hrs @ 50A · Fast 2 hrs @ 100A</td></tr>
+      <tr><td>Motor</td><td>Rated 5 kW / Peak 9.5 kW / Torque 15 Nm @ 3500 rpm</td></tr>
+      <tr><td>Transmission</td><td>Two-step differential · Wheel torque G1 120 Nm, G2 225 Nm</td></tr>
+      <tr><td>Brakes</td><td>Hydraulic drum front &amp; rear · Regenerative braking</td></tr>
+      <tr><td>Suspension</td><td>Front: helical spring + shock absorber · Rear: rubber damper + shock absorber</td></tr>
+      <tr><td>IoT (optional)</td><td>GPS/telematics, geo-fencing, remote immobilisation, cloud vehicle &amp; fleet management, payment wallet integration</td></tr>
+      <tr><td>Warranty</td><td>Battery: 4 years · Vehicle: 4 years / 1,50,000 km</td></tr>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Passenger D+3 — EVAUM PAX D316</h3>
+      <table>
+        <tr><th>Attribute</th><th>Value</th></tr>
+        <tr><td>Category</td><td>L5M Passenger</td></tr>
+        <tr><td>Seating</td><td>D+3</td></tr>
+        <tr><td>Leg space / overhead space</td><td>485 mm / 1010 mm</td></tr>
+        <tr><td>Wheelbase</td><td>2110 mm</td></tr>
+        <tr><td>Kerb / gross weight</td><td>521 kg / 863 kg</td></tr>
+        <tr><td>Vehicle L × W × H</td><td>2840 × 1450 × 2110 mm</td></tr>
+        <tr><td>Max speed</td><td>48 kmph</td></tr>
+        <tr><td>Range</td><td>180 km real-world · 248 km certified</td></tr>
+        <tr><td>Battery</td><td>1 × 16 kWh LFP, 51.2V, 314 Ah</td></tr>
+        <tr><td>Charging</td><td>Standard 6 hrs @ 50A · Fast 3 hrs @ 100A</td></tr>
+        <tr><td>Motor / transmission</td><td>Same as Cargo spec above</td></tr>
+        <tr><td>Warranty</td><td>Battery: 4 years · Vehicle: 4 years / 1,50,000 km</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Passenger D+6 — EVAUM PAX D616</h3>
+      <table>
+        <tr><th>Attribute</th><th>Value</th></tr>
+        <tr><td>Category</td><td>L5M Passenger</td></tr>
+        <tr><td>Seating</td><td>D+6</td></tr>
+        <tr><td>Leg space / overhead space</td><td>570 mm / 956 mm</td></tr>
+        <tr><td>Wheelbase</td><td>2290 mm</td></tr>
+        <tr><td>Kerb / gross weight</td><td>572 kg / 1097 kg</td></tr>
+        <tr><td>Vehicle L × W × H</td><td>3300 × 1480 × 1950 mm</td></tr>
+        <tr><td>Max speed</td><td>48 kmph</td></tr>
+        <tr><td>Range</td><td>180 km real-world · 248 km certified</td></tr>
+        <tr><td>Battery</td><td>1 × 16 kWh LFP, 51.2V, 314 Ah</td></tr>
+        <tr><td>Charging</td><td>Standard 6 hrs @ 50A · Fast 3 hrs @ 100A</td></tr>
+        <tr><td>Motor / transmission</td><td>Same as Cargo spec above</td></tr>
+        <tr><td>Warranty</td><td>Battery: 4 years · Vehicle: 4 years / 1,50,000 km</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Shared component brands (from Questionnaire, use only if directly asked)</h3>
+    <table>
+      <tr><th>Part</th><th>Brand</th></tr>
+      <tr><td>Motor</td><td>Bharat Bose</td></tr>
+      <tr><td>Gear</td><td>Kalyani</td></tr>
+      <tr><td>Controller</td><td>Gtech</td></tr>
+    </table>
+    <table>
+      <tr><th>Common features (both variants)</th><th></th></tr>
+      <tr><td>Economy &amp; Boost mode</td><td>Yes</td></tr>
+      <tr><td>Parking brake</td><td>Yes</td></tr>
+      <tr><td>Spare wheel</td><td>1</td></tr>
+      <tr><td>Charger</td><td>Standard 50A off-board</td></tr>
+      <tr><td>Fire extinguisher</td><td>Yes</td></tr>
+      <tr><td>Charging cable length</td><td>3.25 m (~10 ft)</td></tr>
+      <tr><td>Electricity per full charge</td><td>~8 units</td></tr>
+      <tr><td>Running cost</td><td>~₹0.70/km</td></tr>
+    </table>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<section id="s3">
+  <h2>3. Pricing, Lease &amp; Down Payment Structure <span class="tag">Costing</span></h2>
+  <p class="desc">Combined from the training module's costing tables and the field questionnaire. On-road price = ex-showroom price + insurance/registration, added at delivery.</p>
+  <p class="src">Sources: Vipul_Training_Module.xlsx (Sheet4 &amp; Sheet4 (2)) + Questionnaire.xlsx</p>
+
+  <div class="card">
+    <h3>Headline pricing</h3>
+    <table>
+      <tr><th>Variant</th><th>Ex-showroom</th><th>On-road (approx., incl. insurance)</th><th>Down Payment</th><th>Payment</th><th>Tenure</th></tr>
+      <tr><td>Cargo / Loader (10 kWh)</td><td>₹4,45,600</td><td>~₹4,82,000 – ₹4,82,600</td><td>₹21,000 (CIBIL-dependent)</td><td>₹4,500/week (6 days, not charged for the 7th) or ~₹19,500/month</td><td>3 years (156 weeks) · ownership transfers after</td></tr>
+      <tr><td>Passenger D+6 (16 kWh)</td><td>₹4,39,000</td><td>~₹4.0–4.5 lakh range</td><td>₹31,000 (CIBIL-dependent)</td><td>₹15,500/month</td><td>3 years · ownership transfers after</td></tr>
+      <tr><td>Passenger D+3 (16 kWh)</td><td>₹4,01,000</td><td>~₹4.0–4.5 lakh range</td><td>₹31,000 (CIBIL-dependent)</td><td>~₹14,400/month EMI</td><td>3 years · ownership transfers after</td></tr>
+    </table>
+    <div class="callout"><b>Note:</b> monthly-payment customers pay a higher deposit and the monthly plan does not fold in the maintenance benefit the weekly plan includes. Lease calculation runs Monday–Saturday, with an option to pause for documented reasons (health, travelling home, etc.).</div>
+  </div>
+
+  <div class="card">
+    <h3>Second-hand / refurbished Cargo — pricing by vehicle age</h3>
+    <p class="src" style="margin-top:-4px">⚠ The source table's age-bracket labels and tenure figures don't fully line up internally — shown exactly as provided. See Section 10.</p>
+    <table>
+      <tr><th>Condition</th><th>Down Payment</th><th>Weekly Rental</th><th>Tenure (as listed)</th><th>Ownership Transfer</th></tr>
+      <tr><td>New</td><td>₹21,000 (CIBIL-based)</td><td>₹4,500</td><td>3 years (156 weeks)</td><td>After completing 3 years</td></tr>
+      <tr><td>Second-hand, &lt; 6 months old</td><td>₹15,000 (CIBIL / vehicle age-based)</td><td>₹4,500</td><td>3 years (156 weeks)</td><td>After completing 3 years</td></tr>
+      <tr><td>Second-hand, &gt; 6 months old</td><td>₹15,000</td><td>₹4,200</td><td>36 months</td><td>After completing 3 years</td></tr>
+      <tr><td>Second-hand, &lt; 12 months old</td><td>₹15,000</td><td>₹3,900</td><td>30 months</td><td>After completing 3 years</td></tr>
+      <tr><td>Second-hand, &gt; 18 months old</td><td>₹15,000</td><td>₹3,600</td><td>24 months</td><td>After completing 3 years</td></tr>
+    </table>
+    <div class="warncallout"><b>Do not quote this live on a call.</b> Per the questionnaire, actual second-hand pricing/tenure varies unit-to-unit (some units run 2.2–2.7 years of remaining term). Route these enquiries to the sales team instead of qualifying on price over the phone.</div>
+  </div>
+
+  <div class="card">
+    <h3>Total lifetime cost breakdown — Cargo (as given in training module)</h3>
+    <table>
+      <tr><th>Component</th><th>Value</th><th>Duration</th></tr>
+      <tr><td>Vehicle cost</td><td>₹4,82,000</td><td>—</td></tr>
+      <tr><td>Insurance</td><td>~₹27,000</td><td>3 years</td></tr>
+      <tr><td>Spare parts</td><td>~₹72,000</td><td>3 years</td></tr>
+      <tr><td>Labour cost</td><td>~₹18,000</td><td>3 years</td></tr>
+      <tr><td>RSA (roadside assistance)</td><td>~₹12,000</td><td>one-time</td></tr>
+      <tr><td>Fitness cost (after 2 years)</td><td>~₹20,000</td><td>one-time</td></tr>
+      <tr><td>Tyre replacement (4 tyres)</td><td>~₹12,000</td><td>one-time</td></tr>
+      <tr><td><b>Stated total lifetime cost</b></td><td><b>₹7,23,000</b></td><td>—</td></tr>
+      <tr><td><b>Stated total benefits included</b></td><td><b>~₹1,60,000+</b></td><td>3 years</td></tr>
+    </table>
+    <div class="callout"><b>Talking point from the training module:</b> at 150 km/day, a driver saves roughly ₹9,000/month switching from CNG to a Grevol EV. Also pitched as: "lowest down payment in the market — ₹21,000 vs ₹50,000–60,000 for competitors."</div>
+  </div>
+
+  <div class="card">
+    <h3>Miscellaneous cost &amp; payment facts (questionnaire)</h3>
+    <table>
+      <tr><th>Question</th><th>Answer</th></tr>
+      <tr><td>Hidden charges?</td><td>None, other than Porter registration charges (if the customer opts in to Porter)</td></tr>
+      <tr><td>Missed weekly payment?</td><td>Late fee of ₹50/day</td></tr>
+      <tr><td>Company-name purchase?</td><td>Allowed. GST/company docs accepted. Not available on wet lease.</td></tr>
+      <tr><td>Battery insurance after warranty ends</td><td>~₹100/day for 42 months, includes battery diagnostics</td></tr>
+      <tr><td>Business owners vs end users</td><td>Pitch <b>dry lease</b> to business owners; pitch <b>wet lease</b> to end users/individual drivers</td></tr>
+    </table>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 4 ============ -->
+<section id="s4">
+  <h2>4. Competitor Comparison <span class="tag">Objection handling</span></h2>
+  <p class="desc">Use this when a customer says another brand is cheaper. Grevol's payload and loading-box size lead the segment; its down payment is well below competitors.</p>
+  <p class="src">Source: Vipul_Training_Module.xlsx → Sheet4 (2)</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Cargo / Loader segment</h3>
+      <table>
+        <tr><th>OEM</th><th>Down Payment</th><th>Range</th><th>On-road Price</th><th>Load Capacity</th></tr>
+        <tr><td><b>Grevol</b></td><td><b>₹21,000</b></td><td>125–150 km</td><td>₹4.82 lakh</td><td><b>750 kg</b></td></tr>
+        <tr><td>Mahindra Zor Grand</td><td>₹50,000–60,000</td><td>100 km</td><td>—</td><td>500 kg</td></tr>
+        <tr><td>Bajaj Maxima</td><td>₹50,000–60,000</td><td>183 km</td><td>₹4.98 lakh</td><td>500–600 kg</td></tr>
+        <tr><td>TVS King</td><td>₹50,000–60,000</td><td>156 km</td><td>₹3.85 lakh</td><td>541 kg</td></tr>
+        <tr><td>Euler Hi-Load</td><td>₹50,000–60,000</td><td>150+ km</td><td>~₹4.8 lakh</td><td>650 kg</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Passenger segment</h3>
+      <table>
+        <tr><th>OEM</th><th>Down Payment</th><th>Range</th><th>On-road Price</th></tr>
+        <tr><td><b>Grevol</b></td><td><b>₹31,000</b></td><td>150–200 km</td><td>₹4.0–4.5 lakh</td></tr>
+        <tr><td>Mahindra Treo Plus</td><td>₹40,000</td><td>150 km</td><td>₹3.52 lakh</td></tr>
+        <tr><td>Mahindra e-Alfa Udo</td><td>₹40,000–50,000</td><td>265 km</td><td>₹3.89 lakh</td></tr>
+        <tr><td>Bajaj GoGo 7012</td><td>₹50,000–60,000</td><td>210 km</td><td>₹4.2 lakh</td></tr>
+        <tr><td>TVS Max King</td><td>₹40,000–50,000</td><td>179 km</td><td>₹3.0 lakh</td></tr>
+        <tr><td>Euler</td><td>₹40,000–50,000</td><td>200 km</td><td>₹4.40 lakh</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout"><b>Framing to use:</b> don't attack competitors directly. Point out that the price gap usually reflects what's included — Grevol's lease bundles maintenance and RSA, which a straight competitor purchase typically doesn't.</div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 5 ============ -->
+<section id="s5">
+  <h2>5. Documents &amp; Eligibility Checklist <span class="tag">Onboarding</span></h2>
+  <p class="desc">What's needed from the applicant/lessee and (where applicable) the guarantor, at login and at disbursement.</p>
+  <p class="src">Source: Vipul_Training_Module.xlsx → Sheet4 (2)</p>
+
+  <div class="card">
+    <h3>Login &amp; disbursement document checklist</h3>
+    <table>
+      <tr><th>Document</th><th>Applicant / Lessee</th><th>Guarantor</th></tr>
+      <tr><td>PAN Card</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Aadhaar Card</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Driving Licence</td><td>Yes</td><td>—</td></tr>
+      <tr><td>Voter ID / Passport (if no PAN)</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Form-60 (if no PAN)</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Photograph (1 each)</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Residence ownership proof (either party)</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Bank statement</td><td>Yes</td><td>—</td></tr>
+      <tr><td>Tele-verification</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Bureau / CIBIL check (mandatory)</td><td>Yes</td><td>Yes</td></tr>
+    </table>
+    <table>
+      <tr><th>Post-disbursement</th><th>Applicant / Lessee</th><th>Guarantor</th></tr>
+      <tr><td>Lease agreement (e-sign via Fleet OS) — mandatory</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>RTO kit</td><td>Yes</td><td>—</td></tr>
+      <tr><td>E-NACH (Aadhaar / debit card / net banking / manual)</td><td>Yes</td><td>—</td></tr>
+      <tr><td>Security PDCs</td><td>5 nos.</td><td>—</td></tr>
+      <tr><td>Insurance / invoice / margin money / RTO tax slip</td><td>Yes</td><td>—</td></tr>
+      <tr><td>Vehicle delivery photo at showroom</td><td>Yes</td><td>—</td></tr>
+      <tr><td>Field investigation photo with geo-location</td><td>Yes</td><td>—</td></tr>
+    </table>
+    <div class="callout">No physical hard copy of the lease agreement needs to be signed from now on — it's e-signed via Fleet OS. Scheme calculation / disbursement memo is required separately in every case.</div>
+  </div>
+
+  <div class="card">
+    <h3>Other eligibility facts (questionnaire)</h3>
+    <table>
+      <tr><th>Question</th><th>Answer</th></tr>
+      <tr><td>Driving licence — normal or commercial?</td><td>Normal DL works. Never say a commercial DL is mandatory.</td></tr>
+      <tr><td>Low / bad CIBIL score?</td><td>Security deposit is what's affected; it's adjusted at the last month of the 3-year lease. No fixed minimum CIBIL — never guarantee approval or say "reject/fail."</td></tr>
+      <tr><td>Gramin Seva Permit (passenger)</td><td>Ask upfront if the customer already holds one — flagged as a key discovery question for passenger enquiries.</td></tr>
+    </table>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 6 ============ -->
+<section id="s6">
+  <h2>6. Warranty &amp; AMC Coverage <span class="tag">Post-sale</span></h2>
+  <p class="desc">What's covered under the Gold AMC plan, what's excluded, and what's covered under manufacturer warranty instead.</p>
+  <p class="src">Source: Vipul_Training_Module.xlsx → Sheet4 (2)</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Covered under Gold AMC</h3>
+      <table>
+        <tr><td>Tyre set for 3 years (1 set = 3 tyres)</td></tr>
+        <tr><td>Gear oil, brake oil, grease</td></tr>
+        <tr><td>Front suspension spring</td></tr>
+        <tr><td>Front &amp; rear shock absorbers</td></tr>
+        <tr><td>Rear buffer</td></tr>
+        <tr><td>Front &amp; rear brake shoes</td></tr>
+        <tr><td>Pivot pin</td></tr>
+        <tr><td>Front &amp; rear axles</td></tr>
+        <tr><td>Brake hose</td></tr>
+        <tr><td>Brake wheel cylinder kits (front &amp; rear)</td></tr>
+        <tr><td>Axle rubber boot &amp; clamps</td></tr>
+        <tr><td>Front &amp; rear hub sets</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Excluded from AMC</h3>
+      <table>
+        <tr><td>Electrical &amp; electronic parts</td></tr>
+        <tr><td>Charging parts &amp; cables</td></tr>
+        <tr><td>Lights, indicators, horn, switches</td></tr>
+        <tr><td>Wiper system parts</td></tr>
+        <tr><td>Glass, body panels, exterior parts</td></tr>
+        <tr><td>Seats, handles, interior fittings</td></tr>
+        <tr><td>Control cables, levers, switches</td></tr>
+        <tr><td>Wheels, rims, mirrors, crash guards</td></tr>
+        <tr><td>Damage from misuse, accident, or abuse</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Covered under company warranty (not AMC)</h3>
+    <table>
+      <tr><td>Motor &amp; motor controller</td><td>Battery</td><td>Charger &amp; DC–DC converter</td></tr>
+      <tr><td>Gearbox</td><td>Cluster</td><td>Chassis</td></tr>
+      <tr><td>Propeller shaft</td><td>Throttle</td><td></td></tr>
+    </table>
+    <div class="warncallout">
+      <b>Important notes to relay accurately:</b> AMC is valid only for normal vehicle usage. Damage from accidents, overload, water ingress, misuse, or modification is <b>not</b> covered. For any repair/replacement, the company's decision is final and binding. All parts replaced under AMC/warranty become company property.
+    </div>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 7 ============ -->
+<section id="s7">
+  <h2>7. Sales Discovery &amp; Pitch Framework <span class="tag">Playbook</span></h2>
+  <p class="desc">The discovery checklist and pitch structure your human agents are trained on — worth encoding into the voice agent's discovery questions too.</p>
+  <p class="src">Source: Vipul_Training_Module.xlsx → Sheet4 &amp; Sheet4 (2)</p>
+
+  <div class="card">
+    <h3>Basic profiling (start strong)</h3>
+    <table>
+      <tr><td>Driver name &amp; location</td></tr>
+      <tr><td>Current work experience / occupation</td></tr>
+      <tr><td>Alternate number (update in LSQ/CRM)</td></tr>
+      <tr><td>Driving experience (years)</td></tr>
+      <tr><td>Type of work: Cargo or Passenger</td></tr>
+    </table>
+    <h3>Current vehicle &amp; usage</h3>
+    <table>
+      <tr><td>Currently using: EV / Diesel / CNG</td></tr>
+      <tr><td>Own vehicle or rented?</td></tr>
+      <tr><td>Daily running (km/day)</td></tr>
+      <tr><td>Working hours: full-time / part-time</td></tr>
+      <tr><td>Platform attached — Uber / Ola / Porter / local?</td></tr>
+      <tr><td>If Passenger: does he already hold a Gramin Seva Permit?</td></tr>
+    </table>
+    <h3>Income &amp; earning understanding</h3>
+    <table>
+      <tr><td>Current daily/monthly income</td></tr>
+      <tr><td>Expenses: fuel cost, maintenance, rental (if any)</td></tr>
+      <tr><td>Net savings (approx.)</td></tr>
+    </table>
+    <h3>Financial qualification</h3>
+    <table>
+      <tr><td>Budget for daily/weekly rental or EMI</td></tr>
+      <tr><td>Inform about down payment details clearly</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Pitch alignment</h3>
+    <table>
+      <tr><td>Lead with: daily savings, low maintenance, fixed lease cost, type of lease</td></tr>
+      <tr><td>Explain earning potential clearly along with USPs</td></tr>
+    </table>
+    <h3>Closure &amp; next steps</h3>
+    <table>
+      <tr><td>Vehicle demo / visit — document collection</td></tr>
+      <tr><td>Confirm timeline</td></tr>
+      <tr><td>Schedule follow-up</td></tr>
+      <tr><td>Update CRM properly</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Pro tips &amp; important pointers (as given, kept in original phrasing)</h3>
+    <table>
+      <tr><td>Need to explain "Aapka daily profit kitna badhega"</td></tr>
+      <tr><td>Sell the dream — "Aap apni gaadi ke owner banein"</td></tr>
+      <tr><td>Ask for references — the primary contact might lack DL/permit, but may know someone who has it</td></tr>
+      <tr><td>Include storytelling — how previous customers are happy</td></tr>
+      <tr><td><b>Success formula:</b> Ask → Listen → Understand → Align → Pitch → Close</td></tr>
+      <tr><td>Do not assume — probe and ask questions: what's the usage (self or business), what's the budget, full pay / finance / lease?</td></tr>
+      <tr><td>For demo: if the customer is unsure, offer a home visit / demo at the customer's place, free of charge, so they can try it themselves</td></tr>
+      <tr><td>Narrow down instead of giving too many options — create urgency for closure</td></tr>
+      <tr><td>Always follow up on the previous day's scheduled demo/visit customers</td></tr>
+      <tr><td>Second-hand vehicles undergo comprehensive refurbishment to near-new condition — no major visible damage or defects</td></tr>
+      <tr><td>Focus on sending an in-house sales officer / focus on customer-location demo or visit for better conversion</td></tr>
+    </table>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 8 ============ -->
+<section id="s8">
+  <h2>8. Customer FAQ &amp; Objection Bank <span class="tag">Q&amp;A</span></h2>
+  <p class="desc">Every question-and-answer pair from the field questionnaire, cleaned up. Kept in the original Hindi/Hinglish phrasing where that's how the answer was actually given, since that's the register the voice agent should reply in.</p>
+  <p class="src">Source: Questionare.xlsx</p>
+
+  <div class="card">
+    <table>
+      <tr><th>Category</th><th>Customer Question</th><th>Answer</th></tr>
+      <tr><td>General</td><td>What is Grevol / which company / model is the vehicle?</td><td>Grevol is a Delhi-based EV company making L5-category cargo and passenger vehicles, providing simple and accessible livelihood/employment opportunities to drivers in Delhi for the last 5 years. First qualifying question to ask back: "Gaadi aap EMI pe lena chahenge ya cash pe?"</td></tr>
+      <tr><td>Pricing</td><td>What is the total/on-road price?</td><td>On-road price varies by state due to tax. Ex-showroom is ~₹4,45,000; on-road (with insurance added at delivery) is ~₹4,82,600.</td></tr>
+      <tr><td>Pricing</td><td>What is the weekly EMI?</td><td>₹750/day for 6 days = ₹4,500/week. No charge for the 7th day.</td></tr>
+      <tr><td>Pricing</td><td>Gaadi cash mein kitne ki padegi?</td><td>Reframe: this is a lease model — a small nominal amount secures a livelihood/rozi-roti tool via Porter, with all maintenance from the company; after the 3-year term, the vehicle becomes the customer's.</td></tr>
+      <tr><td>Pricing</td><td>Can I pay monthly instead of weekly?</td><td>Yes, if CIBIL is good and the customer owns a house in Delhi. Monthly advance rental collected is ₹21,000 + ₹19,500/month.</td></tr>
+      <tr><td>Pricing</td><td>What is the price of a second-hand vehicle?</td><td>3–4 options exist (some 3 months old, some 6 months, some older); price and EMI duration depend on vehicle age (varies 2.2–2.7 years remaining term). Route to sales rather than quoting on the call.</td></tr>
+      <tr><td>Pricing</td><td>₹4,200/week seems expensive for a second-hand vehicle</td><td>Not expensive — manufactured in 2025, used only 6–8 months. Framed as: ₹300/week discount off the new-vehicle rate (52 weeks × ₹300 = ₹15,600 saved).</td></tr>
+      <tr><td>Objection</td><td>Other brands are cheaper</td><td>They feel cheaper because they don't include the maintenance benefits Grevol bundles in. Add up all the running costs on the competitor's vehicle and the gap narrows.</td></tr>
+      <tr><td>Pricing</td><td>Any hidden/extra charges?</td><td>No — only Porter registration charges apply if opted in.</td></tr>
+      <tr><td>Finance</td><td>What if my CIBIL score is low/bad?</td><td>Affects the security deposit, which is adjusted in the last month of the 3-year lease.</td></tr>
+      <tr><td>Transfer</td><td>Will the vehicle really transfer to me after 3 years — guarantee?</td><td>It's written into the contract the customer signs — that's the guarantee.</td></tr>
+      <tr><td>Battery</td><td>Battery warranty period?</td><td>4 years / 1,50,000 km.</td></tr>
+      <tr><td>Battery</td><td>Battery costing?</td><td>10 kWh: ₹1,06,000 · 16 kWh: ₹2,03,000 · 20 kWh: ₹2,95,000 (as separately-purchasable battery costs).</td></tr>
+      <tr><td>Battery</td><td>What happens after battery warranty ends?</td><td>Battery insurance available at ~₹100/day for 42 months, includes battery diagnostics.</td></tr>
+      <tr><td>Battery</td><td>What if there's a battery issue later?</td><td>Battery health checkup provided.</td></tr>
+      <tr><td>Range</td><td>What's the vehicle's range?</td><td>140–150 km (per this source; see Section 10 for the spec-sheet figure).</td></tr>
+      <tr><td>Charging</td><td>What charging-point type does the vehicle use?</td><td>DC001 – GB/T standard.</td></tr>
+      <tr><td>Charging</td><td>How much electricity per full charge?</td><td>~8 units.</td></tr>
+      <tr><td>Running cost</td><td>Running cost per km?</td><td>~₹0.70/km.</td></tr>
+      <tr><td>Battery</td><td>What if the battery discharges or fails on the road?</td><td>RSA (roadside assistance) service is provided.</td></tr>
+      <tr><td>Charging</td><td>How long does charging take?</td><td>Fast charging: 1.5 hrs · Slow charging: 4 hrs.</td></tr>
+      <tr><td>Charging</td><td>Charging cable length?</td><td>3.25 m (10 ft).</td></tr>
+      <tr><td>Charging</td><td>Can I charge at home / outside?</td><td>Yes to both.</td></tr>
+      <tr><td>Battery</td><td>Does battery performance reduce over time?</td><td>Yes (natural degradation, as with any EV battery).</td></tr>
+      <tr><td>Specs</td><td>Motor / gear / controller brand?</td><td>Motor: Bharat Bose · Gear: Kalyani · Controller: Gtech.</td></tr>
+      <tr><td>Specs</td><td>Vehicle load capacity?</td><td>750 kg.</td></tr>
+      <tr><td>Suitability</td><td>Can this vehicle be used for my business type?</td><td>Yes.</td></tr>
+      <tr><td>Suitability</td><td>Available for both cargo and passenger use?</td><td>Yes.</td></tr>
+      <tr><td>Company purchase</td><td>Can the vehicle be taken in a company name?</td><td>Yes, but not on wet lease.</td></tr>
+      <tr><td>Company purchase</td><td>Is GST/company documentation accepted?</td><td>Yes.</td></tr>
+      <tr><td>Process</td><td>Can I take a test drive/demo?</td><td>Yes.</td></tr>
+      <tr><td>Documents</td><td>Is a commercial DL required?</td><td>No — a normal driving licence works.</td></tr>
+      <tr><td>Payments</td><td>What happens if I miss a weekly payment?</td><td>₹50/day late fee.</td></tr>
+      <tr><td>Specs</td><td>Load-box (dhalla) size?</td><td>~5.5 ft (W) × 5.75 ft (H) × 4 ft.</td></tr>
+      <tr><td>Durability</td><td>The vehicle feels very lightweight — is it sturdy?</td><td>The chassis/panels are lightweight composite by design, not flimsy — designed this way intentionally. In a major accident there will be damage (as with any vehicle); a fully covered box isn't included by default, but additional accessories can be fitted post-purchase, same as any customer could add.</td></tr>
+      <tr><td>Durability</td><td>Will it manage steep/inclined areas?</td><td>Yes — both Passenger and Loader variants have been tested by the R&amp;D team on gradients.</td></tr>
+    </table>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 9 ============ -->
+<section id="s9">
+  <h2>9. Call-Handling Insights (QA Transcript Pack) <span class="tag">Real calls</span></h2>
+  <p class="desc">This source is a sampled pool of real inbound/outbound call transcripts used for QA and training review — 239 unique samples pulled from a 75-day, ~1,200-call pool, tagged by category and QA score. Below is the aggregate picture only; raw transcripts (which include customer phone numbers) stay in the original workbook rather than being reproduced here.</p>
+  <p class="src">Source: autobot-_transcripts_1.xlsx</p>
+
+  <div class="card">
+    <h3>Sample pack overview</h3>
+    <table>
+      <tr><td>Raw pool checked</td><td>1,200 calls</td></tr>
+      <tr><td>Unique transcript samples selected</td><td>239</td></tr>
+      <tr><td>Workbook tabs</td><td>All Samples · Category Index · Incoming Calls · Top &amp; High QA · Customer FAQs</td></tr>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Category coverage</h3>
+      <table>
+        <tr><th>Category</th><th>Included</th><th>Available in pool</th></tr>
+        <tr><td>Successful Qualified Leads</td><td>35</td><td>412</td></tr>
+        <tr><td>Product Enquiry</td><td>25</td><td>1,054</td></tr>
+        <tr><td>Pricing &amp; Finance</td><td>25</td><td>482</td></tr>
+        <tr><td>Objection Handling</td><td>35</td><td>457</td></tr>
+        <tr><td>Not Interested</td><td>15</td><td>96</td></tr>
+        <tr><td>Already Purchased</td><td>10</td><td>67</td></tr>
+        <tr><td>Wrong Number / Invalid Lead</td><td>10</td><td>101</td></tr>
+        <tr><td>Outside Service Area</td><td>10</td><td>640</td></tr>
+        <tr><td>Callback Requests</td><td>15</td><td>541</td></tr>
+        <tr><td>Multilingual Conversations</td><td>35</td><td>1,170</td></tr>
+        <tr><td>Incomplete / Disconnected Calls</td><td>15</td><td>818</td></tr>
+        <tr><td>Difficult Conversations</td><td>9</td><td>9 <span class="confirm">(below requested count)</span></td></tr>
+        <tr><td>Incoming Calls (dedicated tab)</td><td>15</td><td>274</td></tr>
+        <tr><td>Top-performing / High QA / Qualified (&gt;2 min, QA ≥ 70)</td><td>34</td><td>34</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Agent mix in this sample</h3>
+      <table>
+        <tr><th>Agent</th><th>Sample count</th></tr>
+        <tr><td>Talib</td><td>49</td></tr>
+        <tr><td>Tayabba Zabeen</td><td>41</td></tr>
+        <tr><td>Manju</td><td>39</td></tr>
+        <tr><td>Komal</td><td>31</td></tr>
+        <tr><td>Umra</td><td>29</td></tr>
+        <tr><td>Jyoti</td><td>17</td></tr>
+        <tr><td>Shabana</td><td>12</td></tr>
+        <tr><td>Revansh Phirani</td><td>7</td></tr>
+        <tr><td>Deepak Pal</td><td>2</td></tr>
+        <tr><td>Sonika</td><td>1</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Recurring customer question themes (across the full pool, counts = matching calls)</h3>
+    <table>
+      <tr><th>Theme</th><th>Matching calls</th></tr>
+      <tr><td>Vehicle Specs / Loader</td><td>1,107</td></tr>
+      <tr><td>Multilingual conversations</td><td>1,170</td></tr>
+      <tr><td>Callback / Timing</td><td>712</td></tr>
+      <tr><td>Visit / Showroom / Demo</td><td>749</td></tr>
+      <tr><td>Service / Maintenance</td><td>497</td></tr>
+      <tr><td>Pricing / Lease Rental</td><td>472</td></tr>
+      <tr><td>Delivery / Availability</td><td>403</td></tr>
+      <tr><td>Eligibility / Work Profile</td><td>320</td></tr>
+      <tr><td>Documents / CIBIL</td><td>277</td></tr>
+      <tr><td>Range / Battery / Charging</td><td>258</td></tr>
+      <tr><td>Not Interested / Already Bought</td><td>87</td></tr>
+    </table>
+    <div class="callout"><b>Reading this:</b> vehicle specs/loader questions and demo/visit requests dominate call volume — reinforces why the voice agent's product-pitch and location-qualification flows (Diagrams 2–4 in the flowchart) need to be the sharpest part of the script.</div>
+  </div>
+
+  <div class="warncallout">
+    <b>Branding note:</b> this workbook's title and tab labels refer to "Alt Mobility," but the actual transcript content is customers speaking about "Grevol" vehicles (e.g. a real sample: <i>"...gaadi hai aapki Grevol ki"</i> / agent: <i>"...Grevol se"</i>). This looks like a template originally built for a company called Alt Mobility and reused/relabeled for Grevol data — worth confirming with whoever built this file so the branding in the tab titles doesn't cause confusion later.
+  </div>
+  <div class="warncallout">
+    <b>Privacy note:</b> the source file retains full customer phone numbers on the assumption it's shared internally only. This cleaned version deliberately excludes raw phone numbers and full transcripts — go to the original file for detailed QA review of individual calls.
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<!-- ============ SECTION 10 ============ -->
+<section id="s10">
+  <h2>10. Data Quality Notes — Conflicts to Resolve <span class="tag">Action needed</span></h2>
+  <p class="desc">Everywhere two source files gave different numbers for the same fact. Flagged rather than silently resolved — please confirm the correct figure before it goes into a live script.</p>
+
+  <div class="card">
+    <table>
+      <tr><th>Fact</th><th>Source A</th><th>Source B</th><th>Recommendation</th></tr>
+      <tr><td>Cargo fast-charging time</td><td>Spec sheet: 2 hrs @ 100A</td><td>Training module &amp; questionnaire: 1.5 hrs</td><td>Confirm with product/engineering team; use one number consistently.</td></tr>
+      <tr><td>Cargo max speed</td><td>Spec sheet: 45 kmph</td><td>Training module: 43 kmph</td><td>Minor gap — confirm which is current.</td></tr>
+      <tr><td>Passenger range</td><td>Spec sheet: 180 km real-world / 248 km certified</td><td>Training module: "Two models — 150+ km and 200 km"</td><td>Material difference — confirm before quoting to customers.</td></tr>
+      <tr><td>Ex-showroom vs on-road pricing (Cargo)</td><td>Script/questionnaire: ₹4,45,600 ex-showroom</td><td>Training module: ₹4,82,000 called "on-road price" outright</td><td>These likely reconcile (ex-showroom + insurance ≈ on-road) — but confirm the exact insurance figure so both numbers can be shown together consistently.</td></tr>
+      <tr><td>Second-hand pricing table age brackets</td><td>Row 2: "&lt; 6 months" → 3yr/156wk tenure, ₹4,500/wk</td><td>Row 3: "&gt; 6 months" → 36-month tenure, ₹4,200/wk</td><td>The bracket boundaries and tenures don't read consistently across all four rows — have whoever owns this sheet re-verify it before using live.</td></tr>
+      <tr><td>Total lifetime cost (Cargo)</td><td>Sum of listed components: ₹4,82,000+27,000+72,000+18,000+12,000+20,000+12,000 = ₹6,43,000</td><td>Stated total: ₹7,23,000</td><td>~₹80,000 gap — recompute or find the missing line item.</td></tr>
+      <tr><td>Dealership location for "Santosh Tyres &amp; Wheels"</td><td>Dealer file: Vishwas Nagar (East Delhi)</td><td>Training module Sheet1: Ghaziabad</td><td>Confirm actual location — affects serviceability routing for East Delhi vs Ghaziabad customers.</td></tr>
+      <tr><td>Workbook branding ("Alt Mobility" vs "Grevol")</td><td>Transcript pack titles/tabs say "Alt Mobility"</td><td>Actual transcript content is Grevol customers/agents</td><td>Cosmetic, but confirm before sharing this file outside the team.</td></tr>
+      <tr><td>Battery separate-purchase cost table</td><td>Questionnaire: "10 KWH: ₹1,06,000, 16KWH: ₹2,03,000, 20KWH: ₹2,95,000"</td><td>Not cross-checked elsewhere</td><td>Single-sourced — worth a second confirmation since it's a big number to get wrong on a call.</td></tr>
+    </table>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+</div>
+
+<footer>
+  Grevol Knowledge Base — consolidated from 6 source files · companion to the v2 Voice Agent Script and Conversation Flowchart
+</footer>
+
+</body>
+</html>
