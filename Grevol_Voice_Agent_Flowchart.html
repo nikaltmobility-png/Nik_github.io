@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Grevol AI Voice Agent — End-to-End Conversation Flowchart</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#0f1115;
+    --card:#161a22;
+    --border:#2a2f3a;
+    --text:#e8eaed;
+    --muted:#9aa3b2;
+    --accent:#5b8cff;
+    --accent2:#3ddc97;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+  }
+  header{
+    padding:32px 24px 20px;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,#141824,#0f1115);
+  }
+  header h1{margin:0 0 6px;font-size:24px;}
+  header p{margin:0;color:var(--muted);font-size:14px;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
+  nav.toc{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px 20px;
+    margin:24px 0;
+  }
+  nav.toc h2{margin:0 0 10px;font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:.05em;}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:32px;}
+  nav.toc li{margin-bottom:6px;font-size:14px;}
+  nav.toc a{color:var(--text);text-decoration:none;border-bottom:1px dotted var(--muted);}
+  nav.toc a:hover{color:var(--accent);}
+  section{
+    margin:36px 0 48px;
+    padding-top:8px;
+  }
+  section h2{
+    font-size:19px;
+    margin:0 0 4px;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  section h2 .tag{
+    font-size:11px;
+    font-weight:700;
+    color:#0f1115;
+    background:var(--accent2);
+    padding:2px 8px;
+    border-radius:999px;
+    text-transform:uppercase;
+  }
+  section p.desc{color:var(--muted);font-size:14px;margin:6px 0 18px;max-width:820px;}
+  .diagram-card{
+    background:#ffffff;
+    border-radius:12px;
+    border:1px solid var(--border);
+    padding:20px;
+    overflow-x:auto;
+  }
+  .rule-box{
+    background:#141a2b;
+    border-left:3px solid var(--accent);
+    padding:12px 16px;
+    border-radius:6px;
+    font-size:13.5px;
+    color:#cfd6e6;
+    margin-top:14px;
+  }
+  .rule-box b{color:var(--accent2);}
+  footer{
+    border-top:1px solid var(--border);
+    padding:24px;
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+  }
+  a.back-top{
+    display:inline-block;
+    margin-top:10px;
+    font-size:12px;
+    color:var(--muted);
+    text-decoration:none;
+  }
+  a.back-top:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Grevol AI Voice Agent — End-to-End Conversation Flowchart</h1>
+    <p>Every branch, every state, every rule for "what to answer when." Companion to the v2 script document. Scroll or jump via the index below — each diagram is a self-contained sub-flow that plugs into the master flow in Diagram 1. All disposition tags use the confirmed 6-stage schema (NC Follow Up Call · Call Back · Not Interested · Out of Geo Limit · General Enquiry · Wrong Number) plus SQL/Connected Follow Up for qualified leads.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc" id="top">
+  <h2>Index</h2>
+  <ol>
+    <li><a href="#d1">Master Conversation Flow</a></li>
+    <li><a href="#d2">Cargo / Loader Product Flow</a></li>
+    <li><a href="#d3">Passenger Product Flow</a></li>
+    <li><a href="#d4">Location &amp; Serviceability Flow</a></li>
+    <li><a href="#d5">Disposition Stage Flow (6-Stage Schema)</a></li>
+    <li><a href="#d6">Objection Handling Flow</a></li>
+    <li><a href="#d7">Universal Mid-Call Interrupt Handler</a></li>
+    <li><a href="#d8">Final SQL Decision — Compact Overview</a></li>
+  </ol>
+</nav>
+
+<section id="d1">
+  <h2>1. Master Conversation Flow <span class="tag">Top level</span></h2>
+  <p class="desc">This is the spine of every call. It covers the opening, every possible first response from the customer, and where each response routes to. The dotted arrows show that the interrupt handler (Diagram 7) can fire from literally any state — a customer can ask a price question in the middle of the opening, and the agent answers it, then returns exactly here.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    A["Inbound lead assigned to AI agent"] --> B["Opening:<br/>'Aapne 3-wheeler ke liye enquiry ki thi.<br/>Vehicle lene ka plan kar rahe hain?'"]
+    B --> C{"Customer's first response"}
+
+    C -->|"Clear yes / positive intent"| D["Ask vehicle type:<br/>Cargo/Loader vs Passenger vs Unsure"]
+
+    C -->|"'Price batao'"| E["Ask which product first,<br/>then quote price"]
+    E --> I["Ask: 'Aap vehicle kis location<br/>mein lena chahenge?'"]
+
+    C -->|"'Bas enquiry ki thi'"| F{"Info only, future plan,<br/>or actually positive?"}
+    F -->|"Information only"| Z3["INFORMATION FLOW:<br/>answer questions, offer WhatsApp/brochure,<br/>soft close, no pressure"]
+    F -->|"Future plan"| J["Go to Follow-up Flow<br/>(Diagram 5)"]
+    F -->|"Actually positive"| D
+
+    C -->|"'Maine koi enquiry nahi ki'<br/>(wrong lead)"| G["Ask: 'Kya abhi 3-wheeler<br/>ki requirement hai?'"]
+    G -->|Yes| D
+    G -->|No| Z1["🔴 Disposition: WRONG NUMBER<br/>Status: UQ — Exit pipeline<br/>Flag number for data cleanup"]
+
+    C -->|"'Abhi busy hoon'"| H["Ask convenient callback time"]
+    H --> Z2["🟡 Disposition: CALL BACK<br/>Status: Q — Due: time lead requested<br/>(guardrail: within shift hours)"]
+
+    D --> K{"Which vehicle type?"}
+    K -->|"Cargo / Loader"| L["Go to Cargo/Loader Flow<br/>(Diagram 2)"]
+    K -->|"Passenger"| M["Go to Passenger Flow<br/>(Diagram 3)"]
+    K -->|"Unsure"| N["Ask: 'Goods/delivery ke liye<br/>ya passenger use ke liye?'"]
+    N -->|Goods| L
+    N -->|Passenger| M
+    N -->|"Business/other, unclear"| N2["Ask: 'Vehicle ka use<br/>kis type ke kaam mein hoga?'"] --> N
+
+    L --> I
+    M --> I
+
+    I --> O["Go to Location &amp; Serviceability Flow<br/>(Diagram 4)"]
+    O --> P{"Intent positive AND<br/>serviceable location confirmed?"}
+    P -->|Yes| Q["🟢 SQL — CONNECTED FOLLOW UP<br/>Status: Q → Handoff to human sales<br/>Pass: name · intent · timeline · location · budget"]
+    P -->|"No — future / non-serviceable / objection"| R["Route to Disposition Flow (5)<br/>or Objection Flow (6)<br/>as applicable"]
+
+    B -.->|"Question mid-flow"| S(("Interrupt Handler<br/>(Diagram 7)"))
+    D -.-> S
+    I -.-> S
+    L -.-> S
+    M -.-> S
+    O -.-> S
+    S -.->|"Answer, then return"| B
+    </pre>
+  </div>
+  <div class="rule-box"><b>Rule:</b> the agent never runs this as a rigid script — every arrow is a possible branch based on what the customer actually says, and the interrupt handler can fire between any two boxes.</div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<section id="d2">
+  <h2>2. Cargo / Loader Product Flow <span class="tag">Sub-flow</span></h2>
+  <p class="desc">Cargo and Loader are the same product (10 kWh variant). This covers use-case discovery, the Porter sub-branch, product pitch, and pricing — then always returns to the location question.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    A["Ask: 'Aap vehicle kis type<br/>ke kaam ke liye chalana chahte hain?'"] --> B{"Use case"}
+
+    B -->|Porter| C["Explain Porter partnership +<br/>onboarding assistance if no Porter ID"]
+    C --> C1{"Asks about earning?"}
+    C1 -->|Yes| C2["Give range: approx ₹2,000–₹3,000/day.<br/>Never guarantee earnings."]
+    C1 -->|No| D
+    C2 --> D
+
+    B -->|"Delivery / Logistics"| D["Pitch: cargo/loader suitable<br/>for delivery &amp; logistics use"]
+
+    B -->|"General goods"| E["Ask: 'Approximately kitna<br/>load leke chalenge?'"]
+    E --> E1{"Asks capacity?"}
+    E1 -->|Yes| E2["Payload capacity: 750 kg"]
+    E1 -->|No| D
+    E2 --> D
+
+    D --> F{"Customer interested /<br/>asks what vehicle offers?"}
+    F -->|Yes| G["CARGO PRODUCT PITCH:<br/>10.24 kWh LFP battery · 130 km certified<br/>(120–140 km real-world) · 4hr std / 2hr fast charge<br/>750 kg payload · regen braking · optional IoT<br/>(GPS, geo-fencing, remote immobilisation)"]
+    F -->|No| H
+    G --> H["Return to qualification:<br/>'Aap vehicle kis location mein lena chahenge?'"]
+
+    H --> I{"Customer asks price / payment?"}
+    I -->|Yes| J["CARGO LEASE/FINANCE PITCH:<br/>₹4,45,600 ex-showroom · ₹21,000 down payment<br/>₹4,500/week or ~₹19,500/month · 36-month tenure<br/>Ownership transfers to customer post-lease"]
+    J --> J1{"Asks about 10% flat?"}
+    J1 -->|Yes| J2["Explain: 10% flat calculated on loan amount;<br/>outstanding reduces as payments are made"]
+    J1 -->|No| KK
+    J2 --> KK
+    I -->|No| KK["Continue to Location &amp;<br/>Serviceability Flow (Diagram 4)"]
+    </pre>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<section id="d3">
+  <h2>3. Passenger Product Flow <span class="tag">Sub-flow</span></h2>
+  <p class="desc">Passenger has two configs — D+3 and D+6, both 16 kWh. This covers config selection, pitch, and pricing per variant.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    A["Ask: 'D+3 ya D+6<br/>configuration chahiye?'"] --> B{"Customer choice"}
+    B -->|D+3| C["Confirm: D+3, 16 kWh battery"]
+    B -->|D+6| D["Confirm: D+6, 16 kWh battery"]
+    B -->|"Doesn't know"| E["Guide: D+6 for more passenger<br/>capacity, D+3 for smaller config"] --> B
+
+    C --> F
+    D --> F{"Customer asks what<br/>vehicle offers / specs?"}
+    F -->|Yes| G["PASSENGER PRODUCT PITCH:<br/>16 kWh LFP battery · 248 km certified<br/>(~180 km real-world) · 6hr std / 3hr fast charge<br/>regen braking · optional IoT + fleet management<br/>(Never combine certified &amp; real-world into one number)"]
+    F -->|No| H
+    G --> H["Return to qualification:<br/>'Aap vehicle kis location mein lena chahenge?'"]
+
+    H --> I{"Customer asks price / EMI?"}
+    I -->|"Asks D+6 price"| J["D+6 PITCH:<br/>₹4,39,000 ex-showroom · ₹31,000 DP<br/>₹15,500/month · 36-month tenure<br/>Ownership transfers post-lease"]
+    I -->|"Asks D+3 price"| K["D+3 PITCH:<br/>₹4,01,000 ex-showroom · ₹31,000 DP<br/>~₹14,400/month EMI · 36-month tenure"]
+    J --> L
+    K --> L
+    I -->|No| L["Continue to Location &amp;<br/>Serviceability Flow (Diagram 4)"]
+    </pre>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<section id="d4">
+  <h2>4. Location &amp; Serviceability Flow <span class="tag">Core / v2 update</span></h2>
+  <p class="desc">Serviceable = customer can physically reach a dealership. Not where he'll drive the vehicle later. The key v2 addition: before disqualifying anyone, the agent must always ask for an alternate location — a non-serviceable close is only allowed after that check fails.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    A["Ask: 'Aap kis area/location mein hain?<br/>Kis showroom visit kar sakte hain?'"] --> B["Capture CUSTOMER_LOCATION"]
+    B --> C{"Match locality against<br/>dealer-area mapping"}
+
+    C -->|"Matches a dealership's<br/>covered locality"| D["Confirm: '[Dealership] aapke<br/>liye relevant rahega'"]
+    D --> E{"Purchase intent already<br/>confirmed positive?"}
+    E -->|Yes| F["SQL = QUALIFIED<br/>→ Master Flow closing (1)"]
+    E -->|"No / unclear"| G["Re-confirm: 'Abhi lena hai<br/>ya thoda baad mein?'"]
+    G -->|Now| F
+    G -->|Later| H["Go to Follow-up Flow<br/>(Diagram 5)"]
+
+    C -->|"Ambiguous area given<br/>e.g. 'Delhi ke paas'"| I["Ask for exact locality/landmark.<br/>Do not assume."]
+    I --> C
+
+    C -->|"No dealership covers<br/>this locality"| J["MANDATORY STEP:<br/>'Kya aapke paas koi aur location hai —<br/>office, ghar ka doosra area, ya jahan<br/>aap aksar aate-jaate hain?'"]
+    J --> K{"Alternate location given?"}
+    K -->|"Yes — and it matches coverage"| D
+    K -->|"Yes — but still no match"| J
+    K -->|"No alternate exists"| L["🔴 Disposition: OUT OF GEO LIMIT<br/>Status: UQ — Exit pipeline<br/>(never a hard close — sales team may<br/>know of new coverage or partner options)"]
+    </pre>
+  </div>
+  <div class="rule-box"><b>Rule:</b> the agent must never jump straight from "no local dealership" to a non-serviceable close — the alternate-location question (box J) is mandatory every time.</div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<section id="d5">
+  <h2>5. Disposition Stage Flow — 6-Stage Schema <span class="tag">v3 updated</span></h2>
+  <p class="desc">Every call must end with exactly one of these six disposition tags (or SQL/Connected Follow Up for qualified leads). Leg 2 = customer side of the call. Q = re-queue active; UQ = exits pipeline.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    START(["AI initiates outbound call"]) --> LEG2{"Leg 2 connects?<br/>Customer side answers"}
+
+    LEG2 -->|"❌ No Answer / Switched Off<br/>Network Fail / Ring No Response"| D1["🟡 DISPOSITION 1: NC FOLLOW UP CALL<br/>Status: Q — Re-queue for next dial<br/>No conversation occurred"]
+
+    LEG2 -->|"✅ Customer picks up"| REAL_CONV{"Real conversation?<br/>Did lead share any intent<br/>or info beyond hello?"}
+
+    REAL_CONV -->|"❌ No — hello-hello then hung up<br/>picked up but busy / can't talk<br/>call dropped immediately"| D2B["🟡 DISPOSITION 2: CALL BACK (Default)<br/>Status: Q<br/>Due: Now + 4 hours<br/>Guardrail: within shift hours only"]
+
+    REAL_CONV -->|"✅ Yes — real exchange happened"| WRONG_CHECK{"Correct person?"}
+    WRONG_CHECK -->|"Wrong person / Wrong number"| D6["🔴 DISPOSITION 6: WRONG NUMBER<br/>Status: UQ — Exit pipeline<br/>Flag number for data cleanup"]
+    WRONG_CHECK -->|"Correct lead"| INTENT{"Determine Intent"}
+
+    INTENT -->|"Negative intent<br/>'Nahi chahiye' / 'Interest nahi'"| D3["🔴 DISPOSITION 3: NOT INTERESTED<br/>Status: UQ — Exit pipeline<br/>Set DND flag if requested"]
+
+    INTENT -->|"Info only — no purchase plan<br/>'Bas jaanna tha'"| D5_CHECK{"Any future plan<br/>after gentle probe?"}
+    D5_CHECK -->|"Still none"| D5["🔴 DISPOSITION 5: GENERAL ENQUIRY<br/>Status: UQ — Exit pipeline<br/>Info delivered, no pipeline value"]
+    D5_CHECK -->|"Future intent found"| POS_INTENT
+
+    INTENT -->|"Positive / Future intent"| POS_INTENT["Check serviceability"]
+    POS_INTENT --> GEO{"Primary location<br/>serviceable?"}
+    GEO -->|"✅ Serviceable"| SQL_CHECK
+    GEO -->|"❌ Not serviceable"| ALT["MANDATORY: Ask alternate location<br/>'Kya aur koi location hai?'"]
+    ALT --> ALT2{"Alternate<br/>serviceable?"}
+    ALT2 -->|"✅ Yes"| SQL_CHECK
+    ALT2 -->|"❌ No after all checks"| D4["🔴 DISPOSITION 4: OUT OF GEO LIMIT<br/>Status: UQ — Exit pipeline<br/>Primary + alternate exhausted"]
+
+    SQL_CHECK{"SQL criteria met?<br/>Intent + location + budget<br/>+ timeline all confirmed"}
+    SQL_CHECK -->|"✅ Yes"| SQL["🟢 SQL — CONNECTED FOLLOW UP<br/>Status: Q → Handoff to human sales<br/>Pass: name · intent · location · budget · timeline"]
+
+    SQL_CHECK -->|"❌ No — lead has shared intent &amp; location<br/>but asks for a callback"| D2A["🟡 DISPOSITION 2: CALL BACK (Requested)<br/>Status: Q<br/>Due: exact time lead specified<br/>Guardrail: pull within shift hours"]
+
+    SQL_CHECK -->|"❌ No — future timeline given<br/>'6 mahine baad' etc."| FUTURE["AI negotiates cadence:<br/>'Kya 1-2 mahine mein connect kar sakta hoon?'"]
+    FUTURE --> FUTURE2{"Lead agrees<br/>to shorter cadence?"}
+    FUTURE2 -->|"✅ Agrees — 1 to 2 months"| D2C_SHORT["🟡 DISPOSITION 2: CALL BACK (Future — negotiated)<br/>Status: Q<br/>Due: Now + 30–60 days<br/>Note: Lead agreed to early check-in"]
+    FUTURE2 -->|"❌ Insists on full timeline"| D2C_LONG["🟡 DISPOSITION 2: CALL BACK (Future — lead's date)<br/>Status: Q<br/>Due: Lead's stated date<br/>Note: Full cadence, no early pull-in"]
+    </pre>
+  </div>
+  <div class="rule-box"><b>Rule:</b> Every call leg must end with exactly <b>one</b> disposition tag — no exceptions. If a call drops mid-conversation with no clean disposition, default to <b>Call Back (Default)</b> — Now + 4 hrs — to avoid losing a lead from the pipeline. "Call Back" always means Leg 2 <b>did</b> connect. The sub-type only affects due-time logic.</div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<section id="d6">
+  <h2>6. Objection Handling Flow <span class="tag">Sub-flow</span></h2>
+  <p class="desc">Price, down payment, "let me think," competitor comparisons, CIBIL, documents, company purchase, and unknown questions — all resolved without arguing, then routed back to qualification.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    A{"Objection / question type"}
+
+    A -->|"'Bahut mehenga hai' (price)"| B{"What specifically?"}
+    B -->|"Monthly payment"| C["Route to relevant Finance/EMI pitch<br/>(Diagram 2 or 3)"]
+    B -->|"Down payment"| D["Go to DP objection sub-branch"]
+    B -->|"Overall price"| E["Explain lease structure / benefits<br/>only as relevant — don't over-explain"]
+    C --> F["Re-ask intent:<br/>'Abhi lena hai ya baad mein?'"]
+    D --> F
+    E --> F
+    F -->|Now| G["Return to SQL path<br/>(Location Flow, Diagram 4)"]
+    F -->|Later| H["Go to Follow-up Flow (5)"]
+
+    A -->|"'Down payment bahut zyada'"| I["Ask: 'DP issue hai ya<br/>monthly bhi concern hai?'"]
+    I --> J["Understand financial comfort.<br/>Never promise a lower DP unless<br/>an approved plan exists."]
+    J --> F
+
+    A -->|"'Soch ke bataunga'"| K{"What needs thinking about?"}
+    K -->|Price| B
+    K -->|Finance| C
+    K -->|Family| L["Go to Follow-up Flow (5) —<br/>Family Approval"]
+    K -->|"Money arrangement"| H
+
+    A -->|"'Baaki brand sasti hai'"| M["Ask: comparing price,<br/>running cost, range, or finance?"]
+    M -->|Price| C
+    M -->|"Running cost"| N["Need-analysis / economics pitch"]
+    M -->|Range| O["Vehicle specs pitch<br/>(Diagram 2/3)"]
+    M -->|Finance| C
+    N --> G
+    O --> G
+
+    A -->|"CIBIL question / low CIBIL"| P["No fixed minimum CIBIL. DP may<br/>adjust for low profile. Finance team<br/>confirms eligibility.<br/>Never guarantee approval.<br/>Never say 'reject / fail / not eligible.'"]
+    P --> G
+
+    A -->|"Documents / DL question"| Q["Normal DL works for both cargo &amp; passenger.<br/>Never say commercial DL is mandatory.<br/>Learning-licence assistance if no DL.<br/>Permit requirement varies by state —<br/>capture state, route to permit KB / sales."]
+    Q --> G
+
+    A -->|"Company purchase question"| R["Confirm: possible, GST/company docs<br/>accepted, not on wet lease.<br/>Exact docs confirmed by finance/sales."]
+    R --> G
+
+    A -->|"Question not in approved KB"| S["Never invent an answer.<br/>Say it will be confirmed and<br/>shared with the sales team."]
+    S --> G
+    </pre>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<section id="d7">
+  <h2>7. Universal Mid-Call Interrupt Handler <span class="tag">Applies everywhere</span></h2>
+  <p class="desc">This subroutine can trigger from any box in any other diagram. It's what stops the call from sounding like a questionnaire — the agent always answers the real question first, then returns to exactly where it left off.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    A["Customer asks a question or<br/>raises a new topic mid-flow"] --> B{"Classify the question"}
+
+    B -->|"Price / Finance / EMI"| C["Answer from approved pricing KB<br/>for the relevant product"]
+    B -->|"Specs / range / charging"| D["Answer from spec-sheet KB"]
+    B -->|"Documents / DL / CIBIL / permit"| E["Answer per Documents &amp; CIBIL flow<br/>(Diagram 6), capture state if needed"]
+    B -->|"Objection<br/>(price/competitor/family/etc.)"| F["Route to Objection Handling<br/>(Diagram 6)"]
+    B -->|"Vehicle type change<br/>e.g. cargo → passenger"| G["Update VEHICLE_TYPE, switch product<br/>branch, discard old script entirely"]
+    B -->|"Purchase mode change<br/>e.g. buy vs rental"| H["Offer purchase vs<br/>monthly/lease comparison"]
+    B -->|"Wants human / WhatsApp"| I["Route to Follow-up &amp;<br/>Disposition Flow (5)"]
+    B -->|"Anything not in approved KB"| J["Never invent. Acknowledge,<br/>note for sales team."]
+
+    C --> K["RETURN to the exact state the<br/>conversation was in before the interruption"]
+    D --> K
+    E --> K
+    F --> K
+    G --> K
+    H --> K
+    I --> K
+    J --> K
+    </pre>
+  </div>
+  <div class="rule-box"><b>Rule:</b> the agent should never repeat a question already answered, and never re-ask "are you interested?" once positive intent is visible — this handler exists precisely so the agent can be interrupted constantly without losing the thread.</div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+<section id="d8">
+  <h2>8. Final SQL Decision — Compact Overview <span class="tag">Summary</span></h2>
+  <p class="desc">Everything above collapses into this single decision. If you only remember one diagram, remember this one.</p>
+  <div class="diagram-card">
+    <pre class="mermaid">
+flowchart TD
+    A["Customer"] --> B{"Purchase intent positive?"}
+    B -->|No| C{"Future intent with<br/>a specific timeline?"}
+    C -->|Yes| D["🟡 CALL BACK (Future)<br/>Capture timeline, negotiate cadence"]
+    C -->|"No — info only"| E["🔴 GENERAL ENQUIRY<br/>Status: UQ"]
+    C -->|"No — negative"| E2["🔴 NOT INTERESTED<br/>Status: UQ"]
+
+    B -->|Yes| F{"Location given?"}
+    F -->|No| G["Ask location"] --> F
+    F -->|Yes| H{"Serviceable —<br/>can reach a dealership?"}
+    H -->|Yes| I["🟢 SQL — CONNECTED FOLLOW UP<br/>Status: Q → Handoff"]
+    H -->|No| J["Ask alternate location<br/>(MANDATORY)"]  
+    J --> K{"Alternate serviceable?"}
+    K -->|Yes| I
+    K -->|No| L["🔴 OUT OF GEO LIMIT<br/>Status: UQ<br/>(not a hard close — log for sales team)"]
+    </pre>
+  </div>
+  <a class="back-top" href="#top">↑ back to index</a>
+</section>
+
+</div>
+
+<footer>
+  Grevol AI Voice Agent — Conversation Flowchart · v3 · 6-Stage Disposition Schema · Companion to the full qualification script
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    flowchart: { curve: 'basis', htmlLabels: true, useMaxWidth: true }
+  });
+</script>
+
+</body>
+</html>
