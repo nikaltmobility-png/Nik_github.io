@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>This or That · Ashmita</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #f9e7e0 0%, #f5d8d0 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 780px;
+      width: 100%;
+      background: rgba(255, 248, 245, 0.85);
+      backdrop-filter: blur(6px);
+      border-radius: 56px;
+      box-shadow: 0 25px 45px -12px rgba(90, 40, 30, 0.35);
+      padding: 32px 28px 40px;
+      border: 1px solid rgba(255, 215, 200, 0.5);
+    }
+
+    /* Login Screen */
+    #loginScreen { text-align: center; padding: 20px 10px; }
+    #loginScreen h1 { font-size: 2.5rem; margin-bottom: 20px; color: #3f2a22; }
+    #loginScreen .subtitle { font-size: 1.1rem; color: #634a3e; margin-bottom: 30px; }
+    .login-form { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .login-form input {
+      width: 80%;
+      max-width: 350px;
+      padding: 16px 24px;
+      border-radius: 60px;
+      border: 2px solid #edd9d0;
+      font-size: 1.1rem;
+      background: #fffcf9;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .login-form input:focus { border-color: #c28f7a; box-shadow: 0 0 0 4px rgba(194, 143, 122, 0.2); }
+    .login-form .btn-start {
+      background: #dbb8ab;
+      border: none;
+      border-radius: 60px;
+      padding: 16px 48px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #281a15;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 0 #b28a7a;
+    }
+    .login-form .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #b28a7a; }
+    .login-form .btn-start:active { transform: translateY(4px); box-shadow: 0 1px 0 #b28a7a; }
+
+    /* Game Screen */
+    #gameScreen { display: none; }
+    h1 { font-size: 2.1rem; color: #3f2a22; text-align: center; margin-bottom: 10px; }
+    .user-greeting { text-align: center; color: #634a3e; margin-bottom: 16px; }
+    .question-counter {
+      text-align: center;
+      font-weight: 500;
+      color: #634a3e;
+      background: rgba(235, 210, 200, 0.5);
+      padding: 8px 16px;
+      border-radius: 60px;
+      display: inline-block;
+      margin: 0 auto 22px;
+      width: 100%;
+    }
+
+    .card {
+      background: #fffcf9;
+      border-radius: 48px;
+      padding: 28px 24px 34px;
+      box-shadow: 0 12px 28px -8px rgba(100, 55, 40, 0.15);
+    }
+
+    .visual-area {
+      background: #fcf2ed;
+      border-radius: 36px;
+      padding: 24px 12px 16px;
+      margin-bottom: 28px;
+      border: 1px solid #fae3da;
+    }
+
+    .emoji-big {
+      font-size: 5.8rem;
+      text-align: center;
+      letter-spacing: 12px;
+    }
+
+    .question-text {
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: #341f18;
+      text-align: center;
+      margin: 16px auto 12px;
+      background: #fff3ed;
+      padding: 10px 28px;
+      border-radius: 60px;
+      display: inline-block;
+      width: auto;
+      border: 1px solid #faddd0;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 28px 0 18px;
+    }
+
+    .option-btn {
+      background: #fcf3ef;
+      border: 2px solid #edd9d0;
+      border-radius: 60px;
+      padding: 16px 6px;
+      font-size: 1.2rem;
+      font-weight: 550;
+      color: #3f2820;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 0 #dcc2b8;
+    }
+    .option-btn .opt-emoji { font-size: 2.2rem; }
+    .option-btn:hover { transform: translateY(-2px); background: #ffefea; }
+    .option-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #dcc2b8; }
+    .option-btn.selected { background: #ffe1d4; border-color: #c28f7a; box-shadow: 0 4px 0 #b07d69; }
+
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: white;
+      border: none;
+      border-radius: 60px;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #3f2a22;
+      box-shadow: 0 4px 0 #dcc2b8;
+      cursor: pointer;
+      transition: all 0.12s;
+      background: #fff9f6;
+      border: 1px solid #f0d3c8;
+      flex: 1;
+      min-width: 100px;
+    }
+    .btn-primary { background: #dbb8ab; border-color: #c8a294; box-shadow: 0 4px 0 #b28a7a; }
+    .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #dcc2b8; }
+    .btn:disabled { opacity: 0.35; transform: translateY(2px); pointer-events: none; }
+
+    .result-badge {
+      background: #4a2f27;
+      color: #ffefe8;
+      padding: 10px 22px;
+      border-radius: 60px;
+      font-weight: 500;
+      flex: 1;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .reset-area {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      gap: 12px;
+    }
+    .btn-reset {
+      background: transparent;
+      border: 1px solid #dcc2b8;
+      padding: 10px 22px;
+      border-radius: 60px;
+      font-weight: 500;
+      color: #4f342b;
+      cursor: pointer;
+      transition: all 0.1s;
+      background: rgba(255, 245, 240, 0.6);
+      flex: 1;
+    }
+    .btn-reset:hover { background: #f0dbd2; }
+    .btn-reset:active { transform: scale(0.96); }
+
+    .status-message {
+      color: #6c4f43;
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 8px;
+      margin-top: 10px;
+    }
+
+    .footer-meta { text-align: center; margin-top: 14px; color: #6c4f43; font-size: 0.8rem; opacity: 0.7; }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #3f2a22;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 550px) {
+      .container { padding: 20px 16px; }
+      .options-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .option-btn { padding: 14px 4px; font-size: 1rem; }
+      .option-btn .opt-emoji { font-size: 1.8rem; }
+      .emoji-big { font-size: 4.2rem; }
+      .question-text { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- LOGIN -->
+  <div id="loginScreen">
+    <h1>✨ This or That ✨</h1>
+    <div class="subtitle">🎮 Hey Ashmita, let's play</div>
+    <div class="login-form">
+      <input type="text" id="nameInput" placeholder="Enter your name..." maxlength="50" value="Ashmita">
+      <button class="btn-start" id="startBtn">Start Game 🚀</button>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="gameScreen">
+    <h1>✨ this or that ✨</h1>
+    <div class="user-greeting" id="userGreeting">👋 Hey Ashmita, let's play!</div>
+    <div class="question-counter" id="questionCounter">1 / 4</div>
+
+    <div class="card">
+      <div class="visual-area">
+        <div class="emoji-big" id="emojiDisplay">🤗 🥰 💋</div>
+        <div style="text-align: center;">
+          <span class="question-text" id="questionText">Hugs, Cuddles or Kisses?</span>
+        </div>
+      </div>
+
+      <div class="options-grid" id="optionsGrid">
+        <button class="option-btn" data-index="0"><span class="opt-emoji">🤗</span> Hugs</button>
+        <button class="option-btn" data-index="1"><span class="opt-emoji">🥰</span> Cuddles</button>
+        <button class="option-btn" data-index="2"><span class="opt-emoji">💋</span> Kisses</button>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn" id="prevBtn" disabled>◀ Prev</button>
+        <button class="btn btn-primary" id="nextBtn">Next ▶</button>
+        <div class="result-badge" id="resultBadge">❤️ pick one</div>
+      </div>
+
+      <div class="reset-area">
+        <button class="btn-reset" id="resetBtn">↻ restart</button>
+        <button class="btn-reset" id="submitBtn" style="background: #dbb8ab; border-color: #b28a7a; font-weight: 600;">
+          📤 Submit
+        </button>
+      </div>
+      <div class="status-message" id="statusMessage">💡 Select an option for each question, then submit</div>
+      <div class="footer-meta">✦ your choices matter ✦</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ====== CONFIG ======
+  // Your Google Apps Script URL (responses will still be saved)
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwo3vcWWiQ_8DhHpKR92IGizLj3N4SekDzrvTLTKx2zxlxYond_IyO-X9beh8I91l4L/exec';
+
+  // ====== QUESTIONS ======
+  const QUESTIONS = [
+    { emoji: '🤗 🥰 💋', text: 'Hugs, Cuddles or Kisses?', options: ['Hugs', 'Cuddles', 'Kisses'], emojis: ['🤗', '🥰', '💋'] },
+    { emoji: '☀️ 🌙 ⭐', text: 'Sunrise, Sunset or Stargaze?', options: ['Sunrise', 'Sunset', 'Stargaze'], emojis: ['☀️', '🌙', '⭐'] },
+    { emoji: '🍕 🍔 🌮', text: 'Pizza, Burger or Tacos?', options: ['Pizza', 'Burger', 'Tacos'], emojis: ['🍕', '🍔', '🌮'] },
+    { emoji: '🐶 🐱 🐰', text: 'Dogs, Cats or Bunnies?', options: ['Dogs', 'Cats', 'Bunnies'], emojis: ['🐶', '🐱', '🐰'] }
+  ];
+
+  // ====== STATE ======
+  let userName = 'Ashmita';
+  let currentIndex = 0;
+  let selections = new Array(QUESTIONS.length).fill(null);
+
+  // ====== DOM REFS ======
+  const $ = id => document.getElementById(id);
+  const loginScreen = $('loginScreen');
+  const gameScreen = $('gameScreen');
+  const nameInput = $('nameInput');
+  const startBtn = $('startBtn');
+  const userGreeting = $('userGreeting');
+  const emojiDisplay = $('emojiDisplay');
+  const questionText = $('questionText');
+  const optionsGrid = $('optionsGrid');
+  const prevBtn = $('prevBtn');
+  const nextBtn = $('nextBtn');
+  const resultBadge = $('resultBadge');
+  const resetBtn = $('resetBtn');
+  const submitBtn = $('submitBtn');
+  const counterEl = $('questionCounter');
+  const statusMessage = $('statusMessage');
+  const toast = $('toast');
+
+  let toastTimeout;
+
+  // ====== HELPERS ======
+  function showToast(msg, duration = 3000) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), duration);
+  }
+
+  function updateStatus(msg, isError = false) {
+    statusMessage.textContent = msg;
+    statusMessage.style.color = isError ? '#b33a2a' : '#6c4f43';
+  }
+
+  // ====== RENDER ======
+  function renderQuestion(index) {
+    const q = QUESTIONS[index];
+    emojiDisplay.textContent = q.emoji;
+    questionText.textContent = q.text;
+
+    const buttons = optionsGrid.querySelectorAll('.option-btn');
+    buttons.forEach((btn, i) => {
+      btn.innerHTML = `<span class="opt-emoji">${q.emojis[i]}</span> ${q.options[i]}`;
+      btn.className = 'option-btn';
+      if (selections[index] === i) btn.classList.add('selected');
+    });
+
+    const selected = selections[index];
+    resultBadge.textContent = selected !== null ? `✔️ ${q.emojis[selected]} ${q.options[selected]}` : '💭 pick one';
+    counterEl.textContent = `${index + 1} / ${QUESTIONS.length}`;
+    prevBtn.disabled = index === 0;
+    nextBtn.textContent = index === QUESTIONS.length - 1 ? '✨ Finish' : 'Next ▶';
+    updateStatus(`Question ${index + 1} of ${QUESTIONS.length}`);
+  }
+
+  // ====== EVENTS ======
+  optionsGrid.addEventListener('click', (e) => {
+    const btn = e.target.closest('.option-btn');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.index);
+    selections[currentIndex] = idx;
+    renderQuestion(currentIndex);
+  });
+
+  prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) { currentIndex--; renderQuestion(currentIndex); }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if (currentIndex < QUESTIONS.length - 1) {
+      currentIndex++;
+      renderQuestion(currentIndex);
+    } else {
+      const unanswered = selections.filter(s => s === null).length;
+      if (unanswered === 0) {
+        showToast('✅ All answered! Click Submit to save.', 2000);
+        updateStatus('🎉 All answered! Ready to submit.');
+      } else {
+        showToast(`⚠️ ${unanswered} question(s) left`, 2000);
+        updateStatus(`⚠️ ${unanswered} question(s) remaining`, true);
+      }
+    }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    if (confirm('Restart? Progress will be lost.')) {
+      selections.fill(null);
+      currentIndex = 0;
+      renderQuestion(0);
+      showToast('🔄 Reset', 1500);
+    }
+  });
+
+  // ====== SUBMIT ======
+  submitBtn.addEventListener('click', async () => {
+    const unanswered = selections.filter(s => s === null).length;
+    if (unanswered > 0) {
+      showToast(`⚠️ Answer all ${QUESTIONS.length} questions (${unanswered} left)`, 2500);
+      updateStatus(`⚠️ ${unanswered} question(s) remaining`, true);
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Sending...';
+    updateStatus('📤 Submitting...');
+
+    try {
+      const data = {
+        name: userName,
+        timestamp: new Date().toISOString(),
+        answers: {}
+      };
+      QUESTIONS.forEach((q, i) => {
+        const ans = q.options[selections[i]];
+        data.answers[`Q${i+1}: ${q.text}`] = ans;
+      });
+
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      showToast('✅ Submitted successfully! 🎉', 3000);
+      updateStatus('✅ All done! Thank you!');
+      submitBtn.textContent = '✅ Done!';
+      submitBtn.style.background = '#7fb07f';
+      
+      optionsGrid.querySelectorAll('.option-btn').forEach(b => b.style.opacity = '0.6');
+    } catch (error) {
+      showToast('❌ Error submitting. Check console.', 3000);
+      updateStatus('❌ Submission failed', true);
+      submitBtn.disabled = false;
+      submitBtn.textContent = '📤 Retry';
+    }
+  });
+
+  // ====== LOGIN ======
+  startBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+    if (!name) { showToast('⚠️ Enter your name', 2000); return; }
+    userName = name;
+    userGreeting.textContent = `👋 Hey ${userName}, let's play!`;
+    loginScreen.style.display = 'none';
+    gameScreen.style.display = 'block';
+    renderQuestion(0);
+    showToast(`Welcome ${userName}! 🎮`, 2000);
+  });
+
+  nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') startBtn.click(); });
+
+  // ====== INIT ======
+  loginScreen.style.display = 'block';
+  gameScreen.style.display = 'none';
+  nameInput.value = 'Ashmita';
+  nameInput.focus();
+
+  console.log('✅ This or That game ready for Ashmita!');
+</script>
+</body>
+</html>
